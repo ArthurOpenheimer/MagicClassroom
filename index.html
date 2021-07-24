@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <script src="/js/pixi.min.js"></script>
+    <title>Magic Classroom</title>
+</head>
+<body>
+    <script type="text/javascript">
+        let type = "WebGl"
+        //check if pixi.js is working with WebGl
+        if(!PIXI.utils.isWebGLSupported()){
+            type = "canvas"
+        }
+
+        PIXI.utils.sayHello(type)
+
+        //aliases (easy to read during coding)
+        const loader = PIXI.Loader.shared
+        const Sprite = PIXI.Sprite
+        const resources = PIXI.Loader.reso
+        let app = new PIXI.Application({
+            width: 256,
+            height: 256,
+            forceCanvas: true
+        })
+
+
+        document.body.appendChild(app.view)
+
+        //Change background color
+        app.renderer.backgroundColor = 0x061639
+
+        //Resize canvas
+        app.renderer.resize(100, 100)
+
+        //Make canvas fill the entire screen
+        app.renderer.view.style.position = "absolute"
+        app.renderer.view.style.display = "block"
+        app.renderer.autoRiseze = true
+        app.renderer.resize(window.innerWidth, window.innerHeight)
+        window.addEventListener("resize", (event) => { 
+            app.renderer.resize(window.innerWidth, window.innerHeight)
+        })
+
+   
+        const sprites = {}
+   
+        //Add sprites to cache
+        loader.add('warrior', 'images/black 1 IDLE_000.png')
+        loader.add('warrior2','images/silver 1 IDLE_000.png' )
+        
+        loader.load((loader, resources) => {
+            sprites.warrior = new Sprite(resources.warrior.texture) 
+            sprites.warrior2 = new Sprite(resources.warrior2.texture) 
+ 
+            setup()
+        })
+
+        //Show the load progress
+        loader.onProgress.add((loader, resource) => {
+            console.log(`Loading resource named: ${resource.name}, url: ${resource.url}`)
+            console.log(`Load progress: ${loader.progress}%`)
+        })
+        loader.onError.add((loader, resource) => {
+            console.log(`Resource not found`)
+        })
+        loader.onLoad.add((loader, resource) => {
+            console.log(`${resource.name} loaded with success`)
+        })
+        loader.onComplete.add((loader, resources) => {
+            console.log(`All resources loadeds`)
+            console.log(`Setup also configurated`)
+        })
+
+        //Configurate the game setup
+        function setup() {
+            const darkWarrior = sprites.warrior
+            const silverWarrior = sprites.warrior2
+            app.stage.addChild(darkWarrior);
+            app.stage.addChild(silverWarrior);
+            
+            for(const elementId in sprites) {
+                const element = sprites[elementId]
+                element.scale.set(0.5, 0.5)
+                element.position.set(Math.floor(Math.random()*app.view.width - element.width/2), Math.floor(Math.random()*app.view.height/2))
+            }  
+        }
+        
+    </script>
+</body>
+</html>
