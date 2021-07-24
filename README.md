@@ -1,2 +1,2 @@
 # MagicClassroom
-The place where your School is another fantastic world
+The place where your School is a fantastic world
