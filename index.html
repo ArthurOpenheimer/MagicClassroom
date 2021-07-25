@@ -9,87 +9,84 @@
     <title>Magic Classroom</title>
 </head>
 <body>
-    <script type="text/javascript">
-        let type = "WebGl"
-        //check if pixi.js is working with WebGl
-        if(!PIXI.utils.isWebGLSupported()){
-            type = "canvas"
-        }
-
-        PIXI.utils.sayHello(type)
-
+    <script type="module">
+        import createKeyboardListner from "./js/keyboard-listner.js"
+        import createViewRender from "./js/view-render.js"
+        import createGameLoader from "./js/game-loader.js"
         //aliases (easy to read during coding)
+        let state
+        let sprites = {}
         const loader = PIXI.Loader.shared
         const Sprite = PIXI.Sprite
-        const resources = PIXI.Loader.reso
-        let app = new PIXI.Application({
-            width: 256,
-            height: 256,
-            forceCanvas: true
-        })
-
-
-        document.body.appendChild(app.view)
-
-        //Change background color
-        app.renderer.backgroundColor = 0x061639
-
-        //Resize canvas
-        app.renderer.resize(100, 100)
-
-        //Make canvas fill the entire screen
-        app.renderer.view.style.position = "absolute"
-        app.renderer.view.style.display = "block"
-        app.renderer.autoRiseze = true
-        app.renderer.resize(window.innerWidth, window.innerHeight)
-        window.addEventListener("resize", (event) => { 
-            app.renderer.resize(window.innerWidth, window.innerHeight)
-        })
-
-   
-        const sprites = {}
-   
+        const resources = PIXI.Loader.resources
+        const app = new PIXI.Application()
+        let game = createGame()
+        createViewRender(document, app)
+        createGameLoader(loader, Sprite, game.setup)
+        let movingUp
+        let keyboardListner = createKeyboardListner(document)
         //Add sprites to cache
-        loader.add('warrior', 'images/black 1 IDLE_000.png')
-        loader.add('warrior2','images/silver 1 IDLE_000.png' )
         
-        loader.load((loader, resources) => {
-            sprites.warrior = new Sprite(resources.warrior.texture) 
-            sprites.warrior2 = new Sprite(resources.warrior2.texture) 
- 
-            setup()
-        })
+        
+        function createGame() {
+            const gameState = {
 
-        //Show the load progress
-        loader.onProgress.add((loader, resource) => {
-            console.log(`Loading resource named: ${resource.name}, url: ${resource.url}`)
-            console.log(`Load progress: ${loader.progress}%`)
-        })
-        loader.onError.add((loader, resource) => {
-            console.log(`Resource not found`)
-        })
-        loader.onLoad.add((loader, resource) => {
-            console.log(`${resource.name} loaded with success`)
-        })
-        loader.onComplete.add((loader, resources) => {
-            console.log(`All resources loadeds`)
-            console.log(`Setup also configurated`)
-        })
-
-        //Configurate the game setup
-        function setup() {
+            }
+            
+            //Configurate the game setup
+            function setup(loadSprites) {
+            sprites = loadSprites
             const darkWarrior = sprites.warrior
             const silverWarrior = sprites.warrior2
-            app.stage.addChild(darkWarrior);
-            app.stage.addChild(silverWarrior);
+            darkWarrior.scale.set(0.5, 0.5)
+            darkWarrior.velocityX = 5
+            darkWarrior.velocityY = 5
+
             
-            for(const elementId in sprites) {
-                const element = sprites[elementId]
-                element.scale.set(0.5, 0.5)
-                element.position.set(Math.floor(Math.random()*app.view.width - element.width/2), Math.floor(Math.random()*app.view.height/2))
-            }  
+            keyboardListner.registerObjectId("warrior")
+            keyboardListner.subscribe(game.moveObject)
+            state = 
+
+            app.stage.addChild(darkWarrior);
+            app.ticker.add(Update())
+            }
+            
+            function Update() {
+                
+            
+            }
+
+            function moveObject(command) {
+                const object = sprites[command.objectId]
+                const keyPressed = command.keyPressed
+                const acceptedMoves = {
+                    w(object){
+                        object.y -= object.velocityY
+                    },
+                    d(object){
+                        object.x += object.velocityX
+                    },
+                    s(object){
+                        object.y += object.velocityY
+                    },
+                    a(object){
+                        object.x -= object.velocityX
+                    }
+                }
+                const moveFunction = acceptedMoves[keyPressed]
+                if(moveFunction){
+                    moveFunction(object)
+                }
+            }
+            return{
+                moveObject,
+                setup
+            }
         }
+
+        //Receive all keyboard input and propagate a command to all observers
         
+
     </script>
 </body>
 </html>
