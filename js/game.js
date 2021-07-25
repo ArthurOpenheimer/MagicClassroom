@@ -1,6 +1,6 @@
 import createViewRender from "./view-render.js"
 import createGameLoader from "./game-loader.js"
-export default function createGame(keyboardListner) {
+export default function createGame() {
     let sprites = {}
     const loader = PIXI.Loader.shared
     const Sprite = PIXI.Sprite
