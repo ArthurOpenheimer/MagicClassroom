@@ -11,87 +11,15 @@
 <body>
     <script type="module">
         import createKeyboardListner from "./js/keyboard-listner.js"
-        import createViewRender from "./js/view-render.js"
-        import createGameLoader from "./js/game-loader.js"
+        import createGame from "./js/game.js"
+
         //aliases (easy to read during coding)
-        let state
-        let sprites = {}
-        const loader = PIXI.Loader.shared
-        const Sprite = PIXI.Sprite
-        const resources = PIXI.Loader.resources
-        const app = new PIXI.Application()
         let game = createGame()
-        createViewRender(document, app)
-        createGameLoader(loader, Sprite, game.setup)
-        let movingUp
         let keyboardListner = createKeyboardListner(document)
         //Add sprites to cache
         
-        
-        function createGame() {
-            const gameState = {
-            
-            }
-            
-            //Configurate the game setup
-            function setup(loadSprites) {
-            sprites = loadSprites
-            const darkWarrior = sprites.warrior
-            const silverWarrior = sprites.warrior2
-            darkWarrior.scale.set(0.5, 0.5)
-            sprites.warrior.velocityX = 0
-            sprites.warrior.velocityY = 0
-            
-            keyboardListner.registerObjectId("warrior")
-            keyboardListner.subscribe(game.moveObject)
-
-            app.stage.addChild(darkWarrior);
-            app.ticker.add(delta => Update(delta))
-            }
-            
-            function Update(delta) {
-               sprites.warrior.x +=  sprites.warrior.velocityX
-               sprites.warrior.y +=  sprites.warrior.velocityY 
-            }
-
-
-            function moveObject(command) {
-                const object = sprites[command.objectId]
-                const type = command.type
-                const keyPressed = command.keyPressed
-                const acceptedMoves = {
-                    w(object, stop){
-                        sprites.warrior.velocityY = -1 * stop
-                    },
-                    d(object){
-                        sprites.warrior.velocityX = 1 * stop
-                    },
-                    s(object){
-                        sprites.warrior.velocityY = 1 * stop
-                    },
-                    a(object){
-                        sprites.warrior.velocityX = -1 * stop
-                    }
-                }
-                const moveFunction = acceptedMoves[keyPressed]
-               
-                if(moveFunction){
-                    if(type == 'keyup'){
-                        stop = 0
-                    }
-                    else {
-                        stop = 1
-                    }
-                    moveFunction(object, stop)
-                }
-            }
-            
-            
-            return{
-                moveObject,
-                setup
-            }
-        }
+        keyboardListner.registerObjectId("warrior")
+        keyboardListner.subscribe(game.moveObject)
 
         //Receive all keyboard input and propagate a command to all observers
         
