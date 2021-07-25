@@ -30,7 +30,7 @@
         
         function createGame() {
             const gameState = {
-
+            
             }
             
             //Configurate the game setup
@@ -39,46 +39,54 @@
             const darkWarrior = sprites.warrior
             const silverWarrior = sprites.warrior2
             darkWarrior.scale.set(0.5, 0.5)
-            darkWarrior.velocityX = 5
-            darkWarrior.velocityY = 5
-
+            sprites.warrior.velocityX = 0
+            sprites.warrior.velocityY = 0
             
             keyboardListner.registerObjectId("warrior")
             keyboardListner.subscribe(game.moveObject)
-            state = 
 
             app.stage.addChild(darkWarrior);
-            app.ticker.add(Update())
+            app.ticker.add(delta => Update(delta))
             }
             
-            function Update() {
-                
-            
+            function Update(delta) {
+               sprites.warrior.x +=  sprites.warrior.velocityX
+               sprites.warrior.y +=  sprites.warrior.velocityY 
             }
 
-            
+
             function moveObject(command) {
                 const object = sprites[command.objectId]
+                const type = command.type
                 const keyPressed = command.keyPressed
                 const acceptedMoves = {
-                    w(object){
-                        object.y -= object.velocityY
+                    w(object, stop){
+                        sprites.warrior.velocityY = -1 * stop
                     },
                     d(object){
-                        object.x += object.velocityX
+                        sprites.warrior.velocityX = 1 * stop
                     },
                     s(object){
-                        object.y += object.velocityY
+                        sprites.warrior.velocityY = 1 * stop
                     },
                     a(object){
-                        object.x -= object.velocityX
+                        sprites.warrior.velocityX = -1 * stop
                     }
                 }
                 const moveFunction = acceptedMoves[keyPressed]
+               
                 if(moveFunction){
-                    moveFunction(object)
+                    if(type == 'keyup'){
+                        stop = 0
+                    }
+                    else {
+                        stop = 1
+                    }
+                    moveFunction(object, stop)
                 }
             }
+            
+            
             return{
                 moveObject,
                 setup

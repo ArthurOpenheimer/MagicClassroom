@@ -32,6 +32,17 @@ export default function createKeyboardListner(document) {
         notifyAll(command)
     })
 
+    document.addEventListener('keyup', (event) => {
+        const keyPressed = event.key
+        const command = {
+            type: 'keyup',
+            objectId: state.objectId,
+            keyPressed: keyPressed
+        }
+
+        notifyAll(command)
+    })
+
     return{
         subscribe, 
         registerObjectId
