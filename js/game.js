@@ -1,7 +1,7 @@
 import createViewRender from "./view-render.js"
 import createGameLoader from "./game-loader.js"
-export default function createGame() {
-    
+export default function createGame(document) {
+
     const loader = PIXI.Loader.shared
     const Sprite = PIXI.Sprite
     const resources = PIXI.Loader.resources
@@ -44,16 +44,21 @@ export default function createGame() {
             }
         }
 
-        app.ticker.add(delta => gameState.players[playerId].move(delta))
+        app.ticker.add(delta => gameState.players[playerId].move(delta), this)
         gameState.players[playerId].setPosition({x: playerX, y: playerY})
 
+    }
+
+    function removePlayer(command) {
+        const playerId = command.playerId
+        app.ticker.remove(gameState.players[playerId].move(), this)
+        delete gameState.players[playerId]
     }
     
     //Configurate the game setup
     function setup(loadSprites) {
         gameState.sprites = loadSprites
         addPlayer({playerId: 'a', spriteId: 'warrior'})
-        gameState.players['a'].sprite.scale({x: 0.5, y: 0.4})
 
         app.ticker.add(delta => Update(delta))
     }
@@ -114,7 +119,10 @@ export default function createGame() {
     
     
     return{
+
         moveObject,
+        addPlayer,
+        removePlayer,
         setup
     }
 }

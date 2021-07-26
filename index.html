@@ -13,16 +13,11 @@
         import createKeyboardListner from "./js/keyboard-listner.js"
         import createGame from "./js/game.js"
 
-        //aliases (easy to read during coding)
-        let game = createGame()
-        let keyboardListner = createKeyboardListner(document)
-        //Add sprites to cache
-        
+        const game = createGame(document)
+        const keyboardListner = createKeyboardListner(document)
+
         keyboardListner.registerObjectId('a')
         keyboardListner.subscribe(game.moveObject)
-
-        //Receive all keyboard input and propagate a command to all observers
-        
 
     </script>
 </body>
