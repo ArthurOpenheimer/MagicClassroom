@@ -53,6 +53,8 @@ export default function createGame() {
     function setup(loadSprites) {
         gameState.sprites = loadSprites
         addPlayer({playerId: 'a', spriteId: 'warrior'})
+        gameState.players['a'].sprite.scale({x: 0.5, y: 0.4})
+
         app.ticker.add(delta => Update(delta))
     }
     
@@ -62,31 +64,51 @@ export default function createGame() {
 
 
     function moveObject(command) {
-        const object = gameState.sprites[command.objectId]
+
+        const object = gameState.players[command.objectId]
         const type = command.type
         const keyPressed = command.keyPressed
-        let moving = 0
+
         const acceptedMoves = {
-            w(object, moving){
-                object.inputY = -1
+            w(object){
+                object.input.y = -1
             },
             d(object){
-                object.inputX = 1
+                object.input.x = 1
             },
             s(object){
-                object.inputY = 1
+                object.input.y = 1
             },
             a(object){
-                object.inputX = -1
+                object.input.x = -1
             }
         }
-        const moveFunction = acceptedMoves[keyPressed ]
-       
-        if(moveFunction){
-            if(type == 'keyup'){
-                
+
+        const acceptedStopMoves = {
+            w(object){
+                object.input.y = 0
+            },
+            d(object){
+                object.input.x = 0
+            },
+            s(object){
+                object.input.y = 0
+            },
+            a(object){
+                object.input.x = 0
             }
-            moveFunction(object, moving)
+        }
+
+        let moveFunction = null
+       
+        if(type == "keyup"){
+            moveFunction = acceptedStopMoves[keyPressed]
+        }
+        else{
+            moveFunction = acceptedMoves[keyPressed]
+        }
+        if(moveFunction){
+            moveFunction(object)
         }
     }
     
