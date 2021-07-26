@@ -1,7 +1,7 @@
 import createViewRender from "./view-render.js"
 import createGameLoader from "./game-loader.js"
 export default function createGame() {
-    let sprites = {}
+    
     const loader = PIXI.Loader.shared
     const Sprite = PIXI.Sprite
     const resources = PIXI.Loader.resources
@@ -11,55 +11,80 @@ export default function createGame() {
     createGameLoader(loader, Sprite, setup)
 
     const gameState = {
-            
+        players: {},
+        sprites: {}  
+    }
+
+    function addPlayer(command) {
+        const playerId = command.playerId
+        const spriteId = command.spriteId
+        const playerX = 'playerX' in command ? command.playerX : Math.floor(Math.random () * 100) 
+        const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random () * 100)
+        
+        app.stage.addChild(gameState.sprites[spriteId])
+    
+        gameState.players[playerId] = {
+            sprite: gameState.sprites[spriteId],
+            input: {
+                x: 0,
+                y: 0
+            },
+            velocity: {
+                x: 1,
+                y: 1
+            },
+            move(delta){
+                this.sprite.x += this.input.x * this.velocity.x * delta
+                this.sprite.y += this.input.y * this.velocity.y * delta
+            },
+            setPosition(position){
+                this.sprite.x = position.x
+                this.sprite.y = position.y
+                console.log(`Setting position X: ${position.x}, position Y: ${position.y}`)
+            }
+        }
+
+        app.ticker.add(delta => gameState.players[playerId].move(delta))
+        gameState.players[playerId].setPosition({x: playerX, y: playerY})
+
     }
     
     //Configurate the game setup
     function setup(loadSprites) {
-    sprites = loadSprites
-    const darkWarrior = sprites.warrior
-    const silverWarrior = sprites.warrior2
-    darkWarrior.scale.set(0.5, 0.5)
-    sprites.warrior.velocityX = 0
-    sprites.warrior.velocityY = 0
-    
-    app.stage.addChild(darkWarrior);
-    app.ticker.add(delta => Update(delta))
+        gameState.sprites = loadSprites
+        addPlayer({playerId: 'a', spriteId: 'warrior'})
+        app.ticker.add(delta => Update(delta))
     }
     
     function Update(delta) {
-       sprites.warrior.x +=  sprites.warrior.velocityX 
-       sprites.warrior.y +=  sprites.warrior.velocityY 
+
     }
 
 
     function moveObject(command) {
-        const object = sprites[command.objectId]
+        const object = gameState.sprites[command.objectId]
         const type = command.type
         const keyPressed = command.keyPressed
         let moving = 0
         const acceptedMoves = {
             w(object, moving){
-                sprites.warrior.velocityY = -1 * moving
+                object.inputY = -1
             },
             d(object){
-                sprites.warrior.velocityX = 1 * moving
+                object.inputX = 1
             },
             s(object){
-                sprites.warrior.velocityY = 1 * moving
+                object.inputY = 1
             },
             a(object){
-                sprites.warrior.velocityX = -1 * moving
+                object.inputX = -1
             }
         }
-        const moveFunction = acceptedMoves[keyPressed]
+        const moveFunction = acceptedMoves[keyPressed ]
        
         if(moveFunction){
             if(type == 'keyup'){
-                moving = 0
-            }
-            else {
-                moving = 1
+                
             }
             moveFunction(object, moving)
         }
