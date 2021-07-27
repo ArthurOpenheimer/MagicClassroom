@@ -6,7 +6,6 @@ export default function createGame(document, connectClient) {
     const Sprite = PIXI.Sprite
     const resources = PIXI.Loader.resources
     const app = new PIXI.Application()
-    let sprites = {}
     let textures = {}
 
     const state = {
@@ -17,15 +16,12 @@ export default function createGame(document, connectClient) {
     createGameLoader(loader, Sprite, setup, connectClient)
 
     function setState(newState) {
-        console.log(`Setting new state`)
         setPlayers(newState.players)
     }
 
     function setPlayers(players) {
-        console.log(`Setting players`)
         for(const player of players) {
             if(player.textureSetted) return
-            console.log(`Setting new player:${player.id}`)
             addPlayer({
                 id: player.id,
                 textureId: player.textureId,
@@ -37,16 +33,8 @@ export default function createGame(document, connectClient) {
 
     function addPlayer(command) {
         const texture = textures[command.textureId]
-        console.log("Adding new player")
         let newPlayer = createNewPlayer(PIXI, app, command, texture)
-        state.players[command.playerId] = newPlayer
-        console.log("New player created")
-    }
-
-    function setPlayerSettings(player) {
-        app.ticker.add(delta => player.move(delta), this)
-        player.velocity.x = 5
-        player.velocity.y = 5
+        state.players[command.id] = newPlayer
     }
 
     function removePlayer(command) {
@@ -56,13 +44,13 @@ export default function createGame(document, connectClient) {
     }
     
     //Configurate the game setup
-    function setup(loadSprites, loadTextures) {
-        sprites = loadSprites
+    function setup(loadTextures) {
         textures = loadTextures
     }   
 
     function moveObject(command) {
         const id = command.objectId
+        console.log(state.players)
         const object = state.players[id]
         if(!object){
             console.log("Object not found")
