@@ -1,0 +1,27 @@
+{
+  "name": "magicclassroom",
+  "version": "1.0.0",
+  "description": "The place where your School is a fantastic world",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProjeteEquipe3031/MagicClassroom.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ProjeteEquipe3031/MagicClassroom/issues"
+  },
+  "homepage": "https://github.com/ProjeteEquipe3031/MagicClassroom#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pixi-shim": "^2.3.1",
+    "socket.io": "^4.1.3"
+  }
+  
+}

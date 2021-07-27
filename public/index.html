@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/reset.css">
+    <script src="/js/pixi.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Magic Classroom</title>
+</head>
+<body>
+    <script type="module">
+        import createKeyboardListner from "./js/keyboard-listner.js"
+        import createGame from "./js/game.js"
+
+        let game = createGame(document, connectClient)
+        const keyboardListner = createKeyboardListner(document)
+        
+        
+        function connectClient() {
+            const socket = io()
+
+            socket.on('connect', () => {
+                const playerId = socket.id
+                console.log(`Connected in server with id: ${playerId}`)
+            })
+            
+            socket.on('setup', (command) => {
+                const playerId = socket.id
+                game.setState(command.state)
+                keyboardListner.registerObjectId(playerId)
+                keyboardListner.subscribe(game.moveObject)
+
+            })
+        }
+
+    </script>
+</body>
+</html>
