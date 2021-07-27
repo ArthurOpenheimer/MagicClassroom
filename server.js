@@ -17,7 +17,20 @@ sockets.on('connection', (socket) => {
     game.addPlayer({playerId: playerId})
 
     socket.emit('setup', {state: game.state})
-    
+
+    game.subscribe((command) => {
+        console.log(`Emmitting ${command.type}`)
+        socket.emit(command.type, command)
+    })
+
+    socket.emit('test-add-player', {
+        player:{
+            playerId: 'asda',
+            spriteId:'warrior2', 
+            position:{x: 10, y:20}
+        }
+    })
+        
     socket.on('disconnect', () => {
         //remove player from game here
         console.log(`Player ${playerId} disconnected from the server`)

@@ -7,12 +7,13 @@ export default function createGameLoader(loader, Sprite, setup, connectClient) {
         sprites.warrior = new Sprite(resources.warrior.texture) 
         sprites.warrior.scale.set(0.5, 0.5)
         sprites.warrior2 = new Sprite(resources.warrior2.texture) 
+        sprites.warrior3 = new Sprite(resources.warrior2.texture) 
+        console.log("In load...")
         setup(sprites)
     })
 
     //Show the load progress
     loader.onProgress.add((loader, resource) => {
-        
     })
     loader.onError.add((loader, resource) => {
     })

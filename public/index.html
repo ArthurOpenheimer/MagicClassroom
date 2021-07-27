@@ -29,12 +29,35 @@
             socket.on('setup', (command) => {
                 const playerId = socket.id
                 game.setState(command.state)
+                
                 keyboardListner.registerObjectId(playerId)
                 keyboardListner.subscribe(game.moveObject)
+            })
 
+            socket.on('add-player', (command) => {
+                const playerId = socket.id
+                const player = command.player
+                if(playerId == command.player.playerId) return
+                
+                game.addPlayer({
+                    playerId: player.playerId,
+                    spriteId: player.spriteId,
+                    playerX:  player.position.x,
+                    playerY: player.position.y
+                })
+            })
+
+            socket.on('test-add-player', (command) => {
+                const playerId = socket.id
+                const player = command.player
+                game.addPlayer({
+                    playerId: player.playerId,
+                    spriteId: player.spriteId,
+                    playerX:  player.position.x,
+                    playerY: player.position.y
+                })
             })
         }
-
     </script>
 </body>
 </html>

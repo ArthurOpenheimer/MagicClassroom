@@ -1,4 +1,16 @@
 export default function createGame() {
+    
+    const observers = []
+
+    function subscribe(oberserverFunction) {
+        observers.push(oberserverFunction)
+    }
+
+    function notifyAll(command) {
+        for(const observerFunction of observers){
+            observerFunction(command)
+        }
+    }
     const state = {
         players: []
     }
@@ -35,10 +47,16 @@ export default function createGame() {
         }
 
         state.players.push(player)
+
+        notifyAll({
+            type: 'add-player',
+            player: player
+        })
     }
 
     return {
         state,
-        addPlayer
+        addPlayer,
+        subscribe
     }
 }

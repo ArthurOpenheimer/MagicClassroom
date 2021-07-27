@@ -6,6 +6,7 @@ export default function createGame(document, connectClient) {
     const resources = PIXI.Loader.resources
     const app = new PIXI.Application()
     let sprites = {}
+    let sprites2 = {}
 
     const state = {
         players: {},
@@ -76,7 +77,7 @@ export default function createGame(document, connectClient) {
     //Configurate the game setup
     function setup(loadSprites) {
         sprites = loadSprites
-    }
+    }   
 
     function moveObject(command) {
         const id = command.objectId
