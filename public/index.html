@@ -29,7 +29,7 @@
             socket.on('setup', (command) => {
                 const playerId = socket.id
                 game.setState(command.state)
-                
+                console.log(`Receiving game state: ${command.state} from server`)
                 keyboardListner.registerObjectId(playerId)
                 keyboardListner.subscribe(game.moveObject)
             })

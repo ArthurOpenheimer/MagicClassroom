@@ -12,9 +12,10 @@ app.use(express.static("public"))
 
 sockets.on('connection', (socket) => {
     const playerId = socket.id
-    console.log(`Player ${playerId} connected in the server`)
+    console.log(`Player ${playerId} connected in the server`) 
+    game.addPlayer({playerId: playerId})  
+    console.log(`Player ${playerId} added in game`)
 
-    game.addPlayer({playerId: playerId})
 
     socket.emit('setup', {state: game.state})
 
@@ -23,16 +24,8 @@ sockets.on('connection', (socket) => {
         socket.emit(command.type, command)
     })
 
-    socket.emit('test-add-player', {
-        player:{
-            playerId: 'asda',
-            spriteId:'warrior2', 
-            position:{x: 10, y:20}
-        }
-    })
-        
     socket.on('disconnect', () => {
-        //remove player from game here
+        game.removePlayer(playerId)
         console.log(`Player ${playerId} disconnected from the server`)
     })
 

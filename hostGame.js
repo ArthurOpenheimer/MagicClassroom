@@ -17,33 +17,18 @@ export default function createGame() {
 
     function addPlayer(command) {
         const playerId = command.playerId
-        const spriteId = 'spriteId' in command ? command.spriteId : "warrior"
-        const playerX = 'playerX' in command ? command.playerX : Math.floor(Math.random () * 100) 
-        const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random () * 100)
+        const textureId = 'textureId' in command ? command.textureId : "warrior"
+        const playerX = 'x' in command ? command.playerX : Math.floor(Math.random () * 400) 
+        const playerY = 'y' in command ? command.playerY : Math.floor(Math.random () * 400)
 
         const player = {
-            playerId: playerId,
-            spriteId: spriteId,
+            id: playerId,
+            textureId: textureId,
             position: {
                 x: playerX,
                 y: playerY
             },
-            input: {
-                x: 0,
-                y: 0
-            },
-            velocity: {
-                x: 3,
-                y: 3
-            },
-            move(delta){
-                this.position.x += this.input.x * this.velocity.x * delta
-                this.position.y += this.input.y * this.velocity.y * delta
-            },
-            setPosition(position){
-                this.position.x = position.x
-                this.position.y = position.y
-            }
+            textureSetted: false
         }
 
         state.players.push(player)
@@ -54,9 +39,19 @@ export default function createGame() {
         })
     }
 
+    function removePlayer(playerId) {
+        const players = state.players
+        for(let i = 0; i < players.length; i++) {
+            if(players[i].id == playerId) {
+                players.splice(i, 1);
+            }
+        }
+    }   
+
     return {
         state,
         addPlayer,
+        removePlayer,
         subscribe
     }
 }

@@ -4,12 +4,10 @@ export default function createGameLoader(loader, Sprite, setup, connectClient) {
     loader.add('warrior2','images/silver 1 IDLE_000.png' )
     
     loader.load((loader, resources) => {
-        sprites.warrior = new Sprite(resources.warrior.texture) 
-        sprites.warrior.scale.set(0.5, 0.5)
-        sprites.warrior2 = new Sprite(resources.warrior2.texture) 
-        sprites.warrior3 = new Sprite(resources.warrior2.texture) 
+        let textures = []
+        textures['warrior'] = PIXI.Texture.from('warrior')
         console.log("In load...")
-        setup(sprites)
+        setup(sprites, textures)
     })
 
     //Show the load progress

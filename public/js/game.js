@@ -1,12 +1,13 @@
 import createViewRender from "./view-render.js"
 import createGameLoader from "./game-loader.js"
+import createNewPlayer from "./player.js"
 export default function createGame(document, connectClient) {
     const loader = PIXI.Loader.shared
     const Sprite = PIXI.Sprite
     const resources = PIXI.Loader.resources
     const app = new PIXI.Application()
     let sprites = {}
-    let sprites2 = {}
+    let textures = {}
 
     const state = {
         players: {},
@@ -16,50 +17,30 @@ export default function createGame(document, connectClient) {
     createGameLoader(loader, Sprite, setup, connectClient)
 
     function setState(newState) {
+        console.log(`Setting new state`)
         setPlayers(newState.players)
     }
 
     function setPlayers(players) {
+        console.log(`Setting players`)
         for(const player of players) {
-            if(player.sprite) return
+            if(player.textureSetted) return
+            console.log(`Setting new player:${player.id}`)
             addPlayer({
-                playerId: player.playerId,
-                spriteId: player.spriteId,
-                playerX:  player.position.x,
-                playerY: player.position.y
+                id: player.id,
+                textureId: player.textureId,
+                x:  player.position.x,
+                y: player.position.y
             })
         }
     }
 
     function addPlayer(command) {
-        const playerId = command.playerId
-        const spriteId = 'spriteId' in command ? command.spriteId : "warrior"
-        const playerX = 'playerX' in command ? command.playerX : Math.floor(Math.random () * 100) 
-        const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random () * 100)
-        app.stage.addChild(sprites[spriteId])
-
-        state.players[playerId] = {
-            sprite: sprites[spriteId],
-            input: {
-                x: 0,
-                y: 0
-            },
-            velocity: {
-                x: 3,
-                y: 3
-            },
-            move(delta){
-                this.sprite.x += this.input.x * this.velocity.x * delta
-                this.sprite.y += this.input.y * this.velocity.y * delta
-            },
-            setPosition(position){
-                this.sprite.x = position.x
-                this.sprite.y = position.y
-            }
-        }
-        const player = state.players[playerId]
-        player.setPosition({x: playerX, y: playerY})
-        setPlayerSettings(player)
+        const texture = textures[command.textureId]
+        console.log("Adding new player")
+        let newPlayer = createNewPlayer(PIXI, app, command, texture)
+        state.players[command.playerId] = newPlayer
+        console.log("New player created")
     }
 
     function setPlayerSettings(player) {
@@ -75,8 +56,9 @@ export default function createGame(document, connectClient) {
     }
     
     //Configurate the game setup
-    function setup(loadSprites) {
+    function setup(loadSprites, loadTextures) {
         sprites = loadSprites
+        textures = loadTextures
     }   
 
     function moveObject(command) {
