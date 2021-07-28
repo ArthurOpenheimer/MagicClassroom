@@ -2,23 +2,28 @@ import createViewRender from "./view-render.js"
 import createGameLoader from "./game-loader.js"
 import createNewPlayer from "./player.js"
 export default function createGame(document, connectClient) {
+    
     const loader = PIXI.Loader.shared
     const Sprite = PIXI.Sprite
     const resources = PIXI.Loader.resources
     const app = new PIXI.Application()
     let textures = {}
 
+    //Currrent state of the game
     const state = {
         players: {},
     }
-
+    //Layer responsable for the apresantation of the game
     createViewRender(document, app)
+    //Load all textures
     createGameLoader(loader, Sprite, setup, connectClient)
 
+    //When connect in the server, this client receice the state of the game
     function setState(newState) {
         setPlayers(newState.players)
     }
 
+    //Create the players from the new state received, if the palyer isn't already created
     function setPlayers(players) {
         for(const player of players) {
             if(player.textureSetted) return
@@ -31,23 +36,26 @@ export default function createGame(document, connectClient) {
         }
     }
 
-    function addPlayer(command) {
-        const texture = textures[command.textureId]
-        let newPlayer = createNewPlayer(PIXI, app, command, texture)
-        state.players[command.id] = newPlayer
+    //Receive a receipe of a player and create a new player
+    function addPlayer(newPlayer) {
+        const texture = textures[newPlayer.textureId]
+        let newPlayer = createNewPlayer(PIXI, app, newPlayer, texture)
+        state.players[newPlayer.id] = newPlayer
     }
 
+    //Remove a player from the game
     function removePlayer(command) {
         const playerId = command.id
         app.ticker.remove(state.players[playerId].move(), this)
         delete state.players[playerId]
     }
     
-    //Configurate the game setup
+    //Configurate the game load setup
     function setup(loadTextures) {
         textures = loadTextures
     }   
 
+    //Receive inputs from inuput layer and move an object
     function moveObject(command) {
         const id = command.objectId
         const object = state.players[id]
@@ -99,7 +107,6 @@ export default function createGame(document, connectClient) {
             moveFunction(object)
         }
     }
-    
     
     return{
         state,
