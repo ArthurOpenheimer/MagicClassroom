@@ -34,28 +34,29 @@
             })
 
             socket.on('add-player', (command) => {
+                console.log(`Receiving command type:${command.type}`)
                 const playerId = socket.id
                 const player = command.player
-                if(playerId == command.player.playerId) return
+                if(playerId == command.player.id) return
                 
                 game.addPlayer({
-                    playerId: player.playerId,
-                    spriteId: player.spriteId,
-                    playerX:  player.position.x,
-                    playerY: player.position.y
+                    id: player.id ,
+                    textureId: player.textureId,
+                    x:  player.x,
+                    y: player.y
+                })
+            })
+            socket.on('remove-player', (command) => {
+                console.log(`Receiving command type:${command.type}`)
+                const playerId = socket.id
+                if(playerId == command.Id) return
+                
+                game.removePlayer({
+                    id: command.id
                 })
             })
 
-            socket.on('test-add-player', (command) => {
-                const playerId = socket.id
-                const player = command.player
-                game.addPlayer({
-                    playerId: player.playerId,
-                    spriteId: player.spriteId,
-                    playerX:  player.position.x,
-                    playerY: player.position.y
-                })
-            })
+
         }
     </script>
 </body>

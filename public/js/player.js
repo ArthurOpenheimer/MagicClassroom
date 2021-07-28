@@ -30,12 +30,11 @@ export default function createNewPlayer(PIXI, app, newPlayer, texture) {
         player.textureSetted = true
         app.stage.addChild(player.sprite)
         player.setPosition({
-            x: 'x' in newPlayer ? newPlayer.x : Math.floor(Math.random () * 400),
-            y: 'y' in newPlayer ? newPlayer.y : Math.floor(Math.random () * 200)
+            x: newPlayer.x,
+            y: newPlayer.y
         })
         app.ticker.add(delta => player.move(delta))
-    }
-
+    }   
     setConfig()
     return player
 } 

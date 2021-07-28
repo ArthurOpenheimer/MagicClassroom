@@ -25,8 +25,8 @@ export default function createGame(document, connectClient) {
             addPlayer({
                 id: player.id,
                 textureId: player.textureId,
-                x:  player.position.x,
-                y: player.position.y
+                x:  player.x,
+                y: player.y
             })
         }
     }
@@ -38,7 +38,7 @@ export default function createGame(document, connectClient) {
     }
 
     function removePlayer(command) {
-        const playerId = command.playerId
+        const playerId = command.id
         app.ticker.remove(state.players[playerId].move(), this)
         delete state.players[playerId]
     }
@@ -50,7 +50,6 @@ export default function createGame(document, connectClient) {
 
     function moveObject(command) {
         const id = command.objectId
-        console.log(state.players)
         const object = state.players[id]
         if(!object){
             console.log("Object not found")

@@ -16,18 +16,17 @@ export default function createGame() {
     }
 
     function addPlayer(command) {
-        const playerId = command.playerId
-        const textureId = 'textureId' in command ? command.textureId : "warrior"
-        const playerX = 'x' in command ? command.playerX : Math.floor(Math.random () * 400) 
-        const playerY = 'y' in command ? command.playerY : Math.floor(Math.random () * 400)
+        const newPlayer = command.player
+        const playerId = newPlayer.playerId
+        const textureId = 'textureId' in newPlayer ? newPlayer.textureId : "warrior"
+        const playerX = 'x' in newPlayer ? newPlayer.x : 100
+        const playerY = 'y' in newPlayer ? newPlayer.y : 100
 
         const player = {
             id: playerId,
             textureId: textureId,
-            position: {
-                x: playerX,
-                y: playerY
-            },
+            x:playerX,
+            y:playerY,
             textureSetted: false
         }
 
@@ -40,6 +39,10 @@ export default function createGame() {
     }
 
     function removePlayer(playerId) {
+        notifyAll({
+            type:'remove-player',
+            id: playerId
+        })
         const players = state.players
         for(let i = 0; i < players.length; i++) {
             if(players[i].id == playerId) {

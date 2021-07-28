@@ -13,7 +13,11 @@ app.use(express.static("public"))
 sockets.on('connection', (socket) => {
     const playerId = socket.id
     console.log(`Player ${playerId} connected in the server`) 
-    game.addPlayer({playerId: playerId})  
+    game.addPlayer({player:{
+        playerId: playerId,
+        x:Math.floor(Math.random()* 400), 
+        y:Math.floor(Math.random()* 400)
+    }})  
     console.log(`Player ${playerId} added in game`)
 
 
