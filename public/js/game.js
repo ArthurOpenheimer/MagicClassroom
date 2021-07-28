@@ -2,7 +2,22 @@ import createViewRender from "./view-render.js"
 import createGameLoader from "./game-loader.js"
 import createNewPlayer from "./player.js"
 export default function createGame(document, connectClient) {
-    
+
+    const subject = {
+        observers: [],
+    }
+
+    function subscribe(observerFunction) {
+        subject.observers.push(observerFunction)        
+    }
+
+    function notifyAll(command) {
+        for(const observerFunction of subject.observers) {
+            observerFunction(command)
+            console.log('notifying')
+        }
+    }
+
     const loader = PIXI.Loader.shared
     const Sprite = PIXI.Sprite
     const resources = PIXI.Loader.resources
@@ -37,10 +52,10 @@ export default function createGame(document, connectClient) {
     }
 
     //Receive a receipe of a player and create a new player
-    function addPlayer(newPlayer) {
-        const texture = textures[newPlayer.textureId]
-        let newPlayer = createNewPlayer(PIXI, app, newPlayer, texture)
-        state.players[newPlayer.id] = newPlayer
+    function addPlayer(command) {
+        const texture = textures[command.textureId]
+        let newPlayer = createNewPlayer(PIXI, app, command, texture)
+        state.players[command.id] = newPlayer
     }
 
     //Remove a player from the game
@@ -57,55 +72,8 @@ export default function createGame(document, connectClient) {
 
     //Receive inputs from inuput layer and move an object
     function moveObject(command) {
-        const id = command.objectId
-        const object = state.players[id]
-        if(!object){
-            console.log("Object not found")
-            return
-        }
-        const type = command.type
-        const keyPressed = command.keyPressed
-
-        const acceptedMoves = {
-            w(object){
-                object.input.y = -1
-            },
-            d(object){
-                object.input.x = 1
-            },
-            s(object){
-                object.input.y = 1
-            },
-            a(object){
-                object.input.x = -1
-            }
-        }
-
-        const acceptedStopMoves = {
-            w(object){
-                object.input.y = 0
-            },
-            d(object){
-                object.input.x = 0
-            },
-            s(object){
-                object.input.y = 0
-            },
-            a(object){
-                object.input.x = 0
-            }
-        }
-
-        let moveFunction = null
-        if(type == "keyup"){
-            moveFunction = acceptedStopMoves[keyPressed]
-        }
-        else{
-            moveFunction = acceptedMoves[keyPressed]
-        }
-        if(moveFunction){
-            moveFunction(object)
-        }
+        const objectId = command.objectId
+        state.players[objectId].setInputs(command)
     }
     
     return{
@@ -114,6 +82,7 @@ export default function createGame(document, connectClient) {
         addPlayer,
         removePlayer,
         setup,
-        setState
+        setState,
+        subscribe
     }
 }

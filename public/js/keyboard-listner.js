@@ -1,7 +1,6 @@
 export default function createKeyboardListner(document) {
     const state = {
         observers: [],
-        teste: undefined,
         objectId: null
     }
 
@@ -24,7 +23,8 @@ export default function createKeyboardListner(document) {
     document.addEventListener('keydown', (event) => {
         const keyPressed = event.key
         const command = {
-            type: 'keydown',
+            type: 'move-object',
+            eventType: 'keydown',
             objectId: state.objectId,
             keyPressed: keyPressed
         }
@@ -35,7 +35,8 @@ export default function createKeyboardListner(document) {
     document.addEventListener('keyup', (event) => {
         const keyPressed = event.key
         const command = {
-            type: 'keyup',
+            type: 'move-object',
+            eventType: 'keyup',
             objectId: state.objectId,
             keyPressed: keyPressed
         }

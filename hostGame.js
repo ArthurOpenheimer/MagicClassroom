@@ -15,12 +15,16 @@ export default function createGame() {
         players: []
     }
 
+    function moveObject(command) {
+        notifyAll(command)
+    }
+
     function addPlayer(command) {
         const newPlayer = command.player
         const playerId = newPlayer.playerId
         const textureId = 'textureId' in newPlayer ? newPlayer.textureId : "warrior"
-        const playerX = 'x' in newPlayer ? newPlayer.x : 100
-        const playerY = 'y' in newPlayer ? newPlayer.y : 100
+        const playerX = 'x' in newPlayer ? newPlayer.x : Math.floor(Math.random()*100)
+        const playerY = 'y' in newPlayer ? newPlayer.y : Math.floor(Math.random()*100)
 
         const player = {
             id: playerId,
@@ -51,10 +55,13 @@ export default function createGame() {
         }
     }   
 
+
+
     return {
         state,
         addPlayer,
         removePlayer,
-        subscribe
+        subscribe,
+        moveObject
     }
 }

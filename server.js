@@ -21,11 +21,7 @@ sockets.on('connection', (socket) => {
     console.log(`Player ${playerId} connected in the server`) 
     
     //Add the client player in hostGame
-    game.addPlayer({player:{
-        playerId: playerId,
-        x:Math.floor(Math.random()* 400), 
-        y:Math.floor(Math.random()* 400)
-    }})  
+    game.addPlayer({player:{playerId: playerId}})  
     console.log(`Player ${playerId} added in game`)
 
     //Emit current game state
