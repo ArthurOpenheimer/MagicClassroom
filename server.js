@@ -33,6 +33,15 @@ sockets.on('connection', (socket) => {
         socket.emit(command.type, command)
     })
 
+    socket.on('move-object', (command) => {
+        console.log(`receiving command type ${command.type}`)
+        game.moveObject(command)
+    })
+
+    socket.on('set-position', (command) => {
+        game.setPosition(command)
+    })
+    
     //Remove player from the game when disconnected
     socket.on('disconnect', () => {
         game.removePlayer(playerId)

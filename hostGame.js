@@ -19,6 +19,10 @@ export default function createGame() {
         notifyAll(command)
     }
 
+    function setPosition(command) {
+        notifyAll(command)
+    }
+
     function addPlayer(command) {
         const newPlayer = command.player
         const playerId = newPlayer.playerId
@@ -62,6 +66,7 @@ export default function createGame() {
         addPlayer,
         removePlayer,
         subscribe,
-        moveObject
+        moveObject,
+        setPosition
     }
 }

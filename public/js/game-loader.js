@@ -1,4 +1,4 @@
-export default function createGameLoader(loader, Sprite, setup, connectClient) {
+export default function createGameLoader(loader, Sprite, setup, callback) {
     loader.add('warrior', 'images/black 1 IDLE_000.png')
     loader.add('warrior2','images/silver 1 IDLE_000.png' )
     
@@ -17,7 +17,7 @@ export default function createGameLoader(loader, Sprite, setup, connectClient) {
     loader.onLoad.add((loader, resource) => {
     })
     loader.onComplete.add((loader, resources) => {
-        connectClient()
+        callback()
     })
 
 }

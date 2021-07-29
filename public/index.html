@@ -32,15 +32,17 @@
 
                 //Receive current hostGame state from server
                 game.setState(command.state)
-
+                game.client.playerId = playerId
                 //Register witch object game will move
                 keyboardListner.registerObjectId(playerId)
-                keyboardListner.subscribe(game.moveObject)
+                keyboardListner.subscribe(game.movePlayer)
 
                 //Lisnten to all actions of the game and emit to server
-                keyboardListner.subscribe((command) => {
+                game.subscribe((command) => {
+                    console.log(`Emitting command type: ${command.type}`)
                     socket.emit(command.type, command)
                 })
+
             })
 
             socket.on('add-player', (command) => {
@@ -48,7 +50,7 @@
                 const playerId = socket.id
                 const player = command.player
 
-                //Refuse to add the this client player twice on comeback command
+                //Refuse to add this client player twice on comeback command
                 if(playerId == command.player.id) return
                 
                 game.addPlayer({
@@ -57,6 +59,17 @@
                     x:  player.x,
                     y: player.y
                 })
+            })
+    
+            socket.on('move-object', (command) => {
+                if(command.objectId == socket.id) return
+                game.moveObject(command)
+            })
+
+            socket.on('set-position', (command) => {
+                const playerId = socket.id
+                if(command.id == socket.id) return
+                game.setObjectPosition(command)
             })
 
             socket.on('remove-player', (command) => {

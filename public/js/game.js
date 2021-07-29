@@ -3,6 +3,7 @@ import createGameLoader from "./game-loader.js"
 import createNewPlayer from "./player.js"
 export default function createGame(document, connectClient) {
 
+    //Observer pattern
     const subject = {
         observers: [],
     }
@@ -14,7 +15,6 @@ export default function createGame(document, connectClient) {
     function notifyAll(command) {
         for(const observerFunction of subject.observers) {
             observerFunction(command)
-            console.log('notifying')
         }
     }
 
@@ -27,6 +27,9 @@ export default function createGame(document, connectClient) {
     //Currrent state of the game
     const state = {
         players: {},
+    }
+    const client = {
+        playerId: null
     }
     //Layer responsable for the apresantation of the game
     createViewRender(document, app)
@@ -54,7 +57,7 @@ export default function createGame(document, connectClient) {
     //Receive a receipe of a player and create a new player
     function addPlayer(command) {
         const texture = textures[command.textureId]
-        let newPlayer = createNewPlayer(PIXI, app, command, texture)
+        let newPlayer = createNewPlayer(PIXI, app, command, texture, notifyAll)
         state.players[command.id] = newPlayer
     }
 
@@ -70,19 +73,76 @@ export default function createGame(document, connectClient) {
         textures = loadTextures
     }   
 
-    //Receive inputs from inuput layer and move an object
-    function moveObject(command) {
+    //Send the position of the current player to serve, fixing positions distortions 
+    const sendPosition = setInterval(() => {
+        notifyAll({
+            type: 'set-position',
+            id: client.playerId,
+            x: state.players[client.playerId].sprite.x,
+            y: state.players[client.playerId].sprite.y
+        })
+    }, 5000);
+
+    //Receive from server a new position of an object
+    function setObjectPosition(command) {
+        const objectId = command.id
+        state.players[objectId].setPosition({x: command.x, y: command.y})
+    }
+    //Receive inputs from inuput layer and move this player
+    function movePlayer(command) {
         const objectId = command.objectId
-        state.players[objectId].setInputs(command)
+        const keyPressed = command.keyPressed
+        const eventType = command.eventType
+        let movement = {type: command.type}
+        const acceptedsKeys ={
+            w(){
+                movement.direction = 'up'
+            },
+            d(){
+                movement.direction = 'right'
+            },
+            s(){
+                movement.direction = 'down'
+            },
+            a(){
+                movement.direction = 'left'
+            }
+        }
+        const moveFunction = acceptedsKeys[keyPressed]
+
+        //Check if the input was correct (w,d,s,a in this stage)
+        if(moveFunction){
+            moveFunction()
+            movement.value = 0
+            //the player is moving 
+            if(eventType == 'keydown') {
+                movement.value = 1
+            }
+            //the player isn't moving 
+            //save the objectId to posteriorly send to server
+            movement.objectId = objectId 
+            //new phase of validation
+            state.players[objectId].validateInputs(movement)
+        }
+    }
+
+    //Receive a valiadated movement from server and aply directly to the object
+    function moveObject(movement) {
+        const objectId = movement.objectId
+        console.log(state.players[objectId])
+        state.players[objectId].setInputs(movement)
     }
     
     return{
         state,
+        movePlayer,
         moveObject,
         addPlayer,
         removePlayer,
         setup,
         setState,
-        subscribe
+        subscribe,
+        client,
+        setObjectPosition
     }
 }
