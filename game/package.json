@@ -1,8 +1,8 @@
 {
-  "name": "playmagicclassroom",
+  "name": "magicclassroomgame",
   "version": "1.0.0",
-  "description": "The place where your School is a fantastic world",
-  "main": "hostGame.js",
+  "description": "",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
