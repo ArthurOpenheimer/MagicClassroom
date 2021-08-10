@@ -1,6 +1,6 @@
 import createAbstractPlayer from "./abstractPlayer.js";
 export default function createAbstractScene(){
-    
+    let observers = [];
     let state = {
         players: {},
     }
@@ -20,12 +20,27 @@ export default function createAbstractScene(){
         player.velocity = 5;
 
         state.players[playerId] = player;
-        console.log(player);
+        notifyAll({type: 'add-player', player: player,});
     }
+
+    function subscribe(observerFunction) {
+        observers.push(observerFunction);
+    };
+
+    function notifyAll(command) {
+        if(!observers) return;
+
+        for (const observerFunction of observers) {
+            observerFunction(command);
+        };
+    };
+
+
     
     console.log("Scene created with success!");
     return{
         getState,
         addPlayer,
+        subscribe,
     };  
 }
