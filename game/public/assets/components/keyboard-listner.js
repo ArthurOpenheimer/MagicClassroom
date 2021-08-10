@@ -1,11 +1,11 @@
 export default function createKeyboardListner(document) {
     const state = {
         observers: [],
-        objectId: null
+        playerId: null
     }
 
     function registerObjectId(id) {
-        state.objectId = id
+        state.playerId = id
     }
 
     function subscribe(observerFunction) {
@@ -23,9 +23,9 @@ export default function createKeyboardListner(document) {
     document.addEventListener('keydown', (event) => {
         const keyPressed = event.key
         const command = {
-            type: 'move-object',
-            eventType: 'keydown',
-            objectId: state.objectId,
+            type: 'move-player',
+            value: true,
+            playerId: state.playerId,
             keyPressed: keyPressed
         }
 
@@ -35,9 +35,9 @@ export default function createKeyboardListner(document) {
     document.addEventListener('keyup', (event) => {
         const keyPressed = event.key
         const command = {
-            type: 'move-object',
-            eventType: 'keyup',
-            objectId: state.objectId,
+            type: 'move-player',
+            value: false,
+            playerId: state.playerId,
             keyPressed: keyPressed
         }
 
