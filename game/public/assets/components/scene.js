@@ -1,5 +1,5 @@
 import createPlayer from "./player.js";
-export default function createScene(htmlDOM, PIXI) {
+export default function createScene(htmlDOM, PIXI, newState) {
     let app;
     let textures = {};
     const loader = PIXI.Loader.shared;
@@ -17,11 +17,15 @@ export default function createScene(htmlDOM, PIXI) {
             resolution: 1,
         });
 
-        loadAssets();
+        loadAssets(setup);
     }
 
-    function loadAssets(){
-        loader.add('student', 'assets/sprites/student.png');
+    function setup(){ 
+        setState(newState);
+    }
+
+    function loadAssets(setup){
+        loader.add('student', 'assets/sprites/student_0001_idle_down.png');
 
         loader.load((loader, resources) => {
             textures['student'] = PIXI.Texture.from('student');
@@ -35,14 +39,22 @@ export default function createScene(htmlDOM, PIXI) {
         })
     }
 
+    function setState(newState){
+        const players = newState.players;
+        for(const player in players) {
+            addPlayer(players[player]);
+        };
+    }
+
     function addPlayer(newPlayer){
-        const player = createPlayer(newPlayer);
+        const player = createPlayer(newPlayer.id);
 
         player.sprite = new PIXI.Sprite(textures[newPlayer.textureId]);
+        player.velocity = newPlayer.velocity;
         player.setPosition({x: newPlayer.x, y: newPlayer.y});
-        addOnStage(player.sprite);
         ticker.add(delta => player.loop(delta));
 
+        addOnStage(player.sprite);
         state.players[player.id] = player;
     }
 
@@ -57,14 +69,11 @@ export default function createScene(htmlDOM, PIXI) {
         app.stage.addChild(object);
     }
 
-    function setup(){ 
-        console.log("Nice studying, have fun :D")
-    }
-
     start(htmlDOM);
 
     return{
         state,
         addPlayer,
+        removePlayer,
     };
 }
