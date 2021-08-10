@@ -1,13 +1,13 @@
 import createAbstractPlayer from "./abstractPlayer.js";
 export default function createAbstractScene(){
     let observers = [];
-    let state = {
+    let _state = {
         players: {},
     }
     
+    
     function getState(){
-        console.log(`Returning state to server.js`);
-        return state;
+        return _state;
     }
 
     function addPlayer(playerId){
@@ -19,9 +19,24 @@ export default function createAbstractScene(){
         });
         player.velocity = 5;
 
-        state.players[playerId] = player;
+        _state.players[playerId] = player;
         notifyAll({type: 'add-player', player: player,});
     }
+
+    function removePlayer(playerId) {
+        const players = _state.players;
+
+        for(let i = 0; i < players.length; i++) {
+            if(players[i].id == playerId) {
+                players.splice(i, 1);
+            }
+        };
+
+        notifyAll({
+            type:'remove-player',
+            id: playerId,
+        });
+    }   
 
     function subscribe(observerFunction) {
         observers.push(observerFunction);
@@ -35,12 +50,11 @@ export default function createAbstractScene(){
         };
     };
 
-
-    
     console.log("Scene created with success!");
     return{
         getState,
         addPlayer,
+        removePlayer,
         subscribe,
     };  
 }
