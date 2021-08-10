@@ -12,11 +12,15 @@ const scene = createAbstractScene();
 
 sockets.on('connection', (socket) => {
     const playerId = socket.id;
-    console.log(`Player ${playerId} connected in the server`) 
+    console.log(`Player ${playerId} connected in the server`) ;
 
     scene.addPlayer(playerId);
 
-    socket.emit('setup', {state: scene.getState(),});
+    socket.emit('setup', {state: scene.getState()});
+
+    scene.subscribe((command) => {
+        socket.emit(command.type, command);
+    });
 
     socket.on('disconnect', () => {
         //remove player
