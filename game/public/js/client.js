@@ -9,13 +9,21 @@ function main() {
 function connect(HTML_DOM) {
     const socket = io();
     let scene;
+
     socket.on('connect', () => {
         console.log(`Connected in server with id: ${socket.id}`)
     });
 
     socket.on('setup', (command) => {
         const gameState = command.state
-        let scene = createScene(HTML_DOM, PIXI, gameState);
+        scene = createScene(HTML_DOM, PIXI, gameState);
+    });
+
+    socket.on('add-player', (command) => {
+        const newPlayer = command.player;
+        if(newPlayer.id == socket.id) return;
+        console.log(`New player connected, id: ${newPlayer.id}`);
+        scene.addPlayer(newPlayer);
     });
 
 }
