@@ -3,16 +3,20 @@ import createKeyboardListner from "../assets/components/keyboard-listner.js";
 
 function main() {
     const HTML_DOM = document.getElementById("game");
-    const scene = createScene(HTML_DOM, PIXI);
-    connect();
+    connect(HTML_DOM);
 }
 
-function connect() {
+function connect(HTML_DOM) {
     const socket = io();
-
+    let scene;
     socket.on('connect', () => {
         console.log(`Connected in server with id: ${socket.id}`)
-    })
+    });
+
+    socket.on('setup', (command) => {
+        const gameState = command.state
+        let scene = createScene(HTML_DOM, PIXI, gameState);
+    });
 
 }
 
