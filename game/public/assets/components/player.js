@@ -1,5 +1,4 @@
-export default function createPlayer(newPlayer) {
-    const playerId = newPlayer.id;
+export default function createPlayer(playerId) {
 
     let player = {
         sprite: null,
