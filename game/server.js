@@ -23,7 +23,7 @@ sockets.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        //remove player
+        scene.removePlayer(playerId);
         console.log(`Player ${playerId} disconnected from the server`)
     })
 
