@@ -1,5 +1,4 @@
 import createScene from "../assets/components/scene.js";
-import createKeyboardListner from "../assets/components/keyboard-listner.js";
 
 function main() {
     const HTML_DOM = document.getElementById("game");
@@ -7,7 +6,7 @@ function main() {
 }
 
 function connect(HTML_DOM) {
-    const socket = io();
+    var socket = io();
     let scene;
 
     socket.on('connect', () => {
@@ -16,14 +15,32 @@ function connect(HTML_DOM) {
 
     socket.on('setup', (command) => {
         const gameState = command.state
-        scene = createScene(HTML_DOM, PIXI, gameState);
+        scene = createScene(HTML_DOM, PIXI, gameState, socket.id); 
+
+        scene.subscribe((command) => {
+            socket.emit(command.type, command);
+        });
     });
 
     socket.on('add-player', (command) => {
         const newPlayer = command.player;
+
         if(newPlayer.id == socket.id) return;
+
         console.log(`New player connected, id: ${newPlayer.id}`);
         scene.addPlayer(newPlayer);
+    });
+
+    socket.on('move-player', (command) => { 
+        if(command.id == socket.id) return;
+        scene.moveProxy(command);
+    })
+    
+
+    socket.on('remove-player', (command) => {
+        const playerId = command.id;
+        
+        scene.removePlayer(playerId);
     });
 
 }
