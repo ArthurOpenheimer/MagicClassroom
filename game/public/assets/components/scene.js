@@ -125,6 +125,7 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
         const playerId = movement.id;
         const input = movement.input;
         const player = state.players[playerId];
+        if(!player) return;
 
         player.setPosition(movement.position);
         player.input = input;
