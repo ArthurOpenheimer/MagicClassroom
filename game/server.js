@@ -22,10 +22,14 @@ sockets.on('connection', (socket) => {
         socket.emit(command.type, command);
     });
 
+    socket.on('move-player', (command) => {
+        scene.movePlayer(command);
+    });
+
     socket.on('disconnect', () => {
         scene.removePlayer(playerId);
         console.log(`Player ${playerId} disconnected from the server`)
-    })
+    });
 
 })
 
