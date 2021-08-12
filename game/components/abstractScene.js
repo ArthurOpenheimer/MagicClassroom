@@ -5,7 +5,6 @@ export default function createAbstractScene(){
         players: {},
     }
     
-    
     function getState(){
         return _state;
     }
@@ -25,22 +24,25 @@ export default function createAbstractScene(){
 
     function removePlayer(playerId) {
         const players = _state.players;
-
-        for(let i = 0; i < players.length; i++) {
-            if(players[i].id == playerId) {
-                players.splice(i, 1);
-            }
-        };
-
+        delete players[playerId];
+        
         notifyAll({
             type:'remove-player',
             id: playerId,
         });
     }   
 
+    function movePlayer(movement) {
+        notifyAll(movement);
+        const player = _state.players[movement.id];
+        player.x = movement.position.x;
+        player.y = movement.position.y;
+        player.input = movement.input;
+    }
+
     function subscribe(observerFunction) {
         observers.push(observerFunction);
-    };
+    }
 
     function notifyAll(command) {
         if(!observers) return;
@@ -48,13 +50,13 @@ export default function createAbstractScene(){
         for (const observerFunction of observers) {
             observerFunction(command);
         };
-    };
+    }
 
-    console.log("Scene created with success!");
     return{
         getState,
         addPlayer,
         removePlayer,
+        movePlayer,
         subscribe,
     };  
 }
