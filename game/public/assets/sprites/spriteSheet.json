@@ -1,0 +1,47 @@
+{"frames": {
+
+"student01Walking_01.png":
+{
+	"frame": {"x":0,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+"student01Walking_02.png":
+{
+	"frame": {"x":32,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+"student01Walking_03.png":
+{
+	"frame": {"x":64,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+},
+"student01Walking_04.png":
+{
+	"frame": {"x":96,"y":0,"w":32,"h":32},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":32},
+	"sourceSize": {"w":32,"h":32}
+}},
+"animations": {
+	"student01Walking": ["student01Walking_01.png","student01Walking_02.png","student01Walking_03.png","student01Walking_04.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "spriteSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":128,"h":32},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d4be532f2aa3a6bc194602f3cf12906f:7b7914afce81b4465ec7d95be0e384a4:ea5d22e715ea7a530878e244f6ee1006$"
+}
+}
