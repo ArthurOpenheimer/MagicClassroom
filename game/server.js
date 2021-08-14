@@ -14,14 +14,16 @@ sockets.on('connection', (socket) => {
     const playerId = socket.id;
     console.log(`Player ${playerId} connected in the server`) ;
 
-    scene.addPlayer(playerId);
+    socket.on('client-ready', () => {
+        scene.addPlayer(playerId);
 
-    socket.emit('setup', {state: scene.getState()});
+        socket.emit('setup', {state: scene.getState()});
 
-    scene.subscribe((command) => {
-        socket.emit(command.type, command);
+        scene.subscribe((command) => {
+            socket.emit(command.type, command);
+        });
     });
-
+    
     socket.on('move-player', (command) => {
         scene.movePlayer(command);
     });
