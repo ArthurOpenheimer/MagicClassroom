@@ -1,6 +1,7 @@
 export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
 
     let player = {
+        spriteContainer: null,
         body: null,
         currentAnimation: null,
         animations: {
@@ -48,13 +49,13 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
             if(!newAnimation || newAnimation == this.currentAnimation) return
 
             if(this.currentAnimation) {
-                this.body.removeChild(this.currentAnimation);
+                this.spriteContainer.removeChild(this.currentAnimation);
                 this.currentAnimation.stop();   
             } 
 
             newAnimation.gotoAndPlay(1);
             newAnimation.animationSpeed = 0.1;
-            this.body.addChild(newAnimation);
+            this.spriteContainer.addChild(newAnimation);
 
             this.currentAnimation = newAnimation;
         },
@@ -69,14 +70,17 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         setSprite(spriteId) {
             this.spriteId = spriteId;
         },
+
+        setNickname(nick){
+            let nickname = new PIXI.Text(`${nick}`,{fontFamily : 'Arial', fontSize: 15, fill : 0x000000, align : 'center'});
+            nickname.y -= 25;
+            nickname.x -= nickname.width/2 - 48;
+            player.body.addChild(nickname);
+        },
         
         setFacing(direction) {
             this._facing = direction;
             this.setAnimation();
-        },
-
-        getFacing() {
-            return this._facing;
         },
 
         setInputX(x){
@@ -115,11 +119,19 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
             });
         },
 
+        getFacing() {
+            return this._facing;
+        },
+
         getPosition() {
             return {
                 x: this.body.x,
                 y: this.body.y,
             };
+        },
+
+        onCollisionEnter(){
+            //Do something
         },
 
         loop(delta){
@@ -134,8 +146,14 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         player.animations.idle.left = new PIXI.AnimatedSprite(sheet.animations["student01IdleLeft"]);
         player.animations.walk.right = new PIXI.AnimatedSprite(sheet.animations["student01WalkingRight"]);
         player.animations.walk.left = new PIXI.AnimatedSprite(sheet.animations["student01WalkingLeft"]);
+
+        
         player.body = new PIXI.Container();
-        player.body.scale.set(3,3);
+        player.spriteContainer = new PIXI.Container();
+        player.spriteContainer.scale.set(3,3)
+
+        player.body.addChild(player.spriteContainer);
+        player.setNickname(player.id)
         player.setFacing("down")
     }
 
