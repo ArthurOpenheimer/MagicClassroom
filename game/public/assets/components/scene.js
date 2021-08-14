@@ -79,7 +79,6 @@ export default function createScene(htmlDOM, PIXI) {
     function removePlayer(playerId){
         const player = state.players[playerId];
         ticker.remove(player.loop());
-
         delete state.players[playerId];
     }
 
@@ -145,12 +144,17 @@ export default function createScene(htmlDOM, PIXI) {
 
     function moveProxy(movement) {
         const playerId = movement.id;
-        const input = movement.input;
         const player = state.players[playerId];
         if(!player) return;
-
-        player.setPosition(movement.position);
+        const input = movement.input;
+        const facing = movement.facing;
+        const position = movement.position
+      
         player.input = input;
+        player.setFacing(facing);
+        player.setPosition(position);
+        
+
     }
 
     function addOnStage(object){

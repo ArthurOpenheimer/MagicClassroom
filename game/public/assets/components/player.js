@@ -17,7 +17,6 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
                 left: null
             }
         },
-
         _facing: null,
         spriteId: null,
         id: playerId,
@@ -93,6 +92,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
                 type: 'move-player',
                 input: this.input,
                 position: this.getPosition(),
+                facing: this.getFacing(),
                 id: this.id,
             });
         },
@@ -109,6 +109,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
             notifyAll({
                 type: 'move-player',
                 input: this.input,
+                facing: this.getFacing(),
                 position: this.getPosition(),
                 id: this.id,
             });
@@ -135,6 +136,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         player.animations.walk.left = new PIXI.AnimatedSprite(sheet.animations["student01WalkingLeft"]);
         player.body = new PIXI.Container();
         player.body.scale.set(3,3);
+        player.setFacing("down")
     }
 
     setConfig()
