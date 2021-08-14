@@ -2,7 +2,7 @@ export default function createAbstractPlayer(playerId){
 
     let player = {
         id: playerId,
-        textureId: 'a',
+        spriteId: null,
         x: 0,
         y: 0,
         input: {
