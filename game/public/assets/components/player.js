@@ -52,7 +52,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
                 this.currentAnimation.stop();   
             } 
 
-            newAnimation.play();
+            newAnimation.gotoAndPlay(1);
             newAnimation.animationSpeed = 0.1;
             this.body.addChild(newAnimation);
 
