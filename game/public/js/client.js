@@ -2,24 +2,26 @@ import createScene from "../assets/components/scene.js";
 
 function main() {
     const HTML_DOM = document.getElementById("game");
-    connect(HTML_DOM);
+    let scene = createScene(HTML_DOM, PIXI);
+    connect(scene)
 }
 
-function connect(HTML_DOM) {
+function connect(scene) {
     var socket = io();
-    let scene;
 
     socket.on('connect', () => {
         console.log(`Connected in server with id: ${socket.id}`)
+
+        //Listening scene actions
+        scene.subscribe((command) => {
+            socket.emit(command.type, command);
+        });
     });
 
     socket.on('setup', (command) => {
         const gameState = command.state
-        scene = createScene(HTML_DOM, PIXI, gameState, socket.id); 
-
-        scene.subscribe((command) => {
-            socket.emit(command.type, command);
-        });
+        
+        scene.setup(socket.id, gameState);
     });
 
     socket.on('add-player', (command) => {

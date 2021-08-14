@@ -1,19 +1,19 @@
 import createPlayer from "./player.js";
 import createKeyListner from "./keyboard-listner.js";
 
-export default function createScene(htmlDOM, PIXI, newState, clientId) {
+export default function createScene(htmlDOM, PIXI) {
     let left, up, down, right;
     let observers = [];
     let app;
-    let textures = {};
+    let sheet;
     let state = {
         players: {},
     }
     const loader = PIXI.Loader.shared;
     const ticker = PIXI.Ticker.shared;
-    const currentPlayerId = clientId;
+    let currentPlayerId;
 
-    function start(element){
+    function init(element){
         app = new PIXI.Application({
             view: element,
             width: window.innerWidth,
@@ -21,31 +21,37 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
             backgroundColor: 0xffffff,
             resolution: 1,
         });
+
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-        loadAssets(setup);
+        PIXI.settings.ROUND_PIXELS = true;
+
+        loadAssets();
     }
 
-    function loadAssets(setup){
+    function loadAssets(){
         
-        loader.add('student', 'assets/sprites/student_0001_idle_down.png');
         loader.add("assets/sprites/spriteSheet.json");
 
         loader.load((loader, resources) => {
-            textures['student'] = PIXI.Texture.from('student');
-            setup();
+            sheet = resources["assets/sprites/spriteSheet.json"].spritesheet;
+            notifyAll({
+                type: 'client-ready'
+            });
         });
 
         loader.onProgress.add((loader, resource) => {
-            console.log(`Loading... ${loader.progress}%`)
+            console.log(`Loading... ${loader.progress}%`);
+            console.log(`Resource: ${resource.name}`);
         });
 
         loader.onError.add((loader, resource) => {
-            console.log(`An error ocurred when loading, ${resource}`)
+            console.log(`An error ocurred when loading, ${resource.name}`)
         });
 
     }
 
-    function setup(){ 
+    function setup(clientId, newState){ 
+        currentPlayerId = clientId;
         setState(newState);
         setKeyInputs();
     }
@@ -58,17 +64,15 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
     }
 
     function addPlayer(newPlayer){
-        const player = createPlayer(newPlayer.id, notifyAll);
+        const player = createPlayer(newPlayer.id, notifyAll, PIXI, sheet);
 
-        player.sprite = new PIXI.Sprite(textures[newPlayer.textureId]);
-        player.sprite.scale.set(3,3);
-
+        player.spriteId = newPlayer.spriteId;
         player.velocity = newPlayer.velocity;
         
         player.setPosition({x: newPlayer.x, y: newPlayer.y});
         ticker.add(delta => player.loop(delta));
 
-        addOnStage(player.sprite);
+        addOnStage(player.body);
         state.players[player.id] = player;
     }
 
@@ -163,10 +167,9 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
         }
     }
 
-    start(htmlDOM);
-
+    init(htmlDOM);
     return{
-        state,
+        setup,
         addPlayer,
         removePlayer,
         moveProxy,
