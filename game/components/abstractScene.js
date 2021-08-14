@@ -33,8 +33,9 @@ export default function createAbstractScene(){
     }   
 
     function movePlayer(movement) {
-        notifyAll(movement);
         const player = _state.players[movement.id];
+        if(!player) return
+        notifyAll(movement);
         player.x = movement.position.x;
         player.y = movement.position.y;
         player.input = movement.input;
