@@ -25,9 +25,19 @@ export default function createPlayer(playerId, notifyAll) {
             this.sprite.y = position.y;
         },
 
-        setInput(input){
-            if(input == this.input) return;
-            this.input = input;
+        setInputX(x){
+            if(x == this.input.x) return;
+            this.input.x = x;
+            notifyAll({
+                type: 'move-player',
+                input: this.input,
+                position: this.getPosition(),
+                id: this.id,
+            });
+        },
+        setInputY(y){
+            if(y == this.input.y) return;
+            this.input.y = y;
             notifyAll({
                 type: 'move-player',
                 input: this.input,

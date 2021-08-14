@@ -26,7 +26,9 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
     }
 
     function loadAssets(setup){
+        
         loader.add('student', 'assets/sprites/student_0001_idle_down.png');
+        loader.add("assets/sprites/spriteSheet.json");
 
         loader.load((loader, resources) => {
             textures['student'] = PIXI.Texture.from('student');
@@ -45,12 +47,7 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
 
     function setup(){ 
         setState(newState);
-
-        left = createKeyListner("a"),
-        up = createKeyListner("w" ),
-        right = createKeyListner("d"),
-        down = createKeyListner("s");
-        moveClientPlayer();
+        setKeyInputs();
     }
 
     function setState(newState){
@@ -65,7 +62,9 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
 
         player.sprite = new PIXI.Sprite(textures[newPlayer.textureId]);
         player.sprite.scale.set(3,3);
+
         player.velocity = newPlayer.velocity;
+        
         player.setPosition({x: newPlayer.x, y: newPlayer.y});
         ticker.add(delta => player.loop(delta));
 
@@ -80,44 +79,63 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
         delete state.players[playerId];
     }
 
-    function moveClientPlayer(){  
+    function setKeyInputs(){  
         const player = state.players[currentPlayerId];
+        left = createKeyListner("a"),
+        up = createKeyListner("w" ),
+        right = createKeyListner("d"),
+        down = createKeyListner("s");
 
         left.press = () => {
-            player.setInput({x: -1, y: player.input.y})
-        };
-        left.release = () => {
-            if(!right.isDown){
-                player.setInput({x: 0, y: player.input.y})
-            }
+                if(right.isDown) return;
+            player.setInputX(-1);
         };
 
-        up.press = () => {
-            player.setInput({x: player.input.x, y: -1})
-        };
-        up.release = () => {
-            if(!down.isDown){
-                player.setInput({x: player.input.x, y: 0})
+        left.release = () => {
+            if(right.isDown) {
+                player.setInputX(1);
+                return;
             }
+            player.setInputX(0)
         };
 
         right.press = () => {
-            player.setInput({x: 1, y: player.input.y})
+            if(left.isDown) return;
+            player.setInputX(1);
         };
-        right.release = () => {
-            if(!left.isDown){
 
-                player.setInput({x: 0, y: player.input.y})
+        right.release = () => {
+            if(left.isDown) {
+                player.setInputX(-1);
+                return;
             }
+            player.setInputX(0)
+        };
+
+        up.press = () => {
+            if(down.isDown) return
+            player.setInputY(-1)
+        };
+
+        up.release = () => {
+            if(down.isDown){
+                player.setInputY(1)
+                return
+            }
+            player.setInputY(0)
         };
 
         down.press = () => {
-            player.setInput({x: player.input.x, y: 1})
+            if(up.isDown) return;
+            player.setInputY(1);
         };
+
         down.release = () => {
-            if(!up.isDown){
-                player.setInput({x: player.input.x, y: 0})
+            if(up.isDown){
+                player.setInputY(-1);
+                return;
             }
+            player.setInputY(0);
         };
     }
 
@@ -151,7 +169,6 @@ export default function createScene(htmlDOM, PIXI, newState, clientId) {
         state,
         addPlayer,
         removePlayer,
-        moveClientPlayer,
         moveProxy,
         subscribe,
     }
