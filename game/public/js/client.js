@@ -45,6 +45,10 @@ function connect(scene) {
         scene.removePlayer(playerId);
     });
 
+    socket.on('chat-message', (command) => {
+        scene.receiveChatMessage(command);
+    })
+
 }
 
 main();

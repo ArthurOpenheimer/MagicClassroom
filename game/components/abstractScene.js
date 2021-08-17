@@ -30,7 +30,13 @@ export default function createAbstractScene(){
             type:'remove-player',
             id: playerId,
         });
-    }   
+    }
+    
+    
+    function sendChatMessage(command) {
+        notifyAll(command);
+        console.log(command.text)
+    }
 
     function movePlayer(movement) {
         const player = _state.players[movement.id];
@@ -55,6 +61,7 @@ export default function createAbstractScene(){
 
     return{
         getState,
+        sendChatMessage,
         addPlayer,
         removePlayer,
         movePlayer,

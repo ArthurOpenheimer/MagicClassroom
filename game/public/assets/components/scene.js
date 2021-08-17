@@ -1,11 +1,13 @@
 import createPlayer from "./player.js";
 import createKeyListner from "./keyboard-listner.js";
+import createChat from "./chat.js";
 
 export default function createScene(htmlDOM, PIXI) {
     let left, up, down, right;
     let observers = [];
     let app;
     let sheet;
+    let chat;
     let state = {
         players: {},
     }
@@ -53,11 +55,34 @@ export default function createScene(htmlDOM, PIXI) {
     function setup(clientId, newState){ 
         currentPlayerId = clientId;
         setState(newState);
-        setKeyInputs();
+        subscribeKeys();
+        
+        chat = createChat(PIXI, app, (message) =>{
+            notifyAll({
+                type: 'chat-message',
+                id: clientId,
+                text: message,
+            })
+        });
+ 
+        chat.onFocus(() => {
+            unsubscribeKeys();
+        })
+        
+        chat.onBlur(() => {
+            subscribeKeys();
+        })
+        
+        addOnStage(chat.body)
+    }
+
+    function receiveChatMessage(msg){
+        chat.receiveMessage(msg);
     }
 
     function setState(newState){
         const players = newState.players;
+
         for(const player in players) {
             addPlayer(players[player]);
         }
@@ -82,15 +107,27 @@ export default function createScene(htmlDOM, PIXI) {
         delete state.players[playerId];
     }
 
-    function setKeyInputs(){  
-        const player = state.players[currentPlayerId];
+    function subscribeKeys() {
         left = createKeyListner("a"),
         up = createKeyListner("w" ),
         right = createKeyListner("d"),
         down = createKeyListner("s");
+        
+        setKeyInputs();
+    }
+
+    function unsubscribeKeys(){
+        left.unsubscribe();
+        right.unsubscribe();
+        up.unsubscribe();
+        down.unsubscribe();
+    }
+
+    function setKeyInputs(){  
+        const player = state.players[currentPlayerId];
 
         left.press = () => {
-                if(right.isDown) return;
+            if(right.isDown) return;
             player.setInputX(-1);
         };
 
@@ -153,8 +190,6 @@ export default function createScene(htmlDOM, PIXI) {
         player.input = input;
         player.setFacing(facing);
         player.setPosition(position);
-        
-
     }
 
     function addOnStage(object){
@@ -176,6 +211,7 @@ export default function createScene(htmlDOM, PIXI) {
         setup,
         addPlayer,
         removePlayer,
+        receiveChatMessage,
         moveProxy,
         subscribe,
     }

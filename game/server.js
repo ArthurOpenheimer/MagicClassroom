@@ -27,6 +27,10 @@ sockets.on('connection', (socket) => {
     socket.on('move-player', (command) => {
         scene.movePlayer(command);
     });
+    
+    socket.on('chat-message', (commad) => {
+        scene.sendChatMessage(commad);
+    })
 
     socket.on('disconnect', () => {
         scene.removePlayer(playerId);
