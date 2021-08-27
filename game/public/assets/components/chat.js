@@ -39,13 +39,17 @@ export default function createChat(PIXI, app, callBack) {
         },
 
         receiveMessage(msg) {
-            const messagesLength = this.messages.children.length;
-
-            const message = new PIXI.Text(msg.text, {fontFamily : 'Arial', fontSize: 12, fill : 0xffffff, align : 'center'});
+            const message = new PIXI.Text(msg.id+": "+msg.text, {fontFamily : 'Arial', fontSize: 12, fill : 0xffffff, align : 'center'});
             this.messages.addChild(message);
-
+            this.messages.children.forEach(element => {
+                element.y -= 15;
+            });
             message.x = this._inputField.x + 5;
-            message.y = this._inputField.y - 30 - 15*messagesLength;
+            message.y = this._inputField.y - 30;
+
+            if(this.messages.children[0].y < this.y - this.height + 15){
+                this.messages.removeChildAt(0);
+            }
         },
 
         onFocus(callBack) {
