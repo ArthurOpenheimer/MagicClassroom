@@ -1,16 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <p>Login</p>
-    <input type="text" id="user"><br><br>
-    <input type="password" id="password"><br><br>
-    <button type="button" id="login">Login</button>
-    <button type="button" id="register" (click)="onRegister()">Registrar</button>
-</body>
-</html>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div>
+        <a routerLink="/signup-component" class="btn btn-link" (click)="onRegister()">Não possui uma conta? Registre-se</a>
+    </div>
+</form>

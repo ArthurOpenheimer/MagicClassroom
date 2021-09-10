@@ -1,1 +1,6 @@
-<app-login></app-login>
+<div *ngIf="display">
+<p>Magic classroom</p>
+<button (click)="changePage()" >Login</button>
+</div>
+
+<router-outlet></router-outlet>
