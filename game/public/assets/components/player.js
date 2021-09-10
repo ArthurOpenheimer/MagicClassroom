@@ -38,7 +38,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
 
         setAnimation() {
             let newAnimation;
-            if(this.input.x == 0) {
+            if(this.input.x == 0 && this.input.y == 0) {
                 newAnimation = this.animations.idle[this._facing];
                 
             }
@@ -56,7 +56,6 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
             newAnimation.gotoAndPlay(1);
             newAnimation.animationSpeed = 0.1;
             this.spriteContainer.addChild(newAnimation);
-
             this.currentAnimation = newAnimation;
         },
 
@@ -141,11 +140,14 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
     };      
 
     function setConfig() {
+        player.animations.idle.up = new PIXI.AnimatedSprite(sheet.animations["student01IdleUp"]);
         player.animations.idle.down = new PIXI.AnimatedSprite(sheet.animations["student01IdleDown"]);
         player.animations.idle.right = new PIXI.AnimatedSprite(sheet.animations["student01IdleRight"]);
         player.animations.idle.left = new PIXI.AnimatedSprite(sheet.animations["student01IdleLeft"]);
         player.animations.walk.right = new PIXI.AnimatedSprite(sheet.animations["student01WalkingRight"]);
+        player.animations.walk.up = new PIXI.AnimatedSprite(sheet.animations["student01WalkingUp"]);
         player.animations.walk.left = new PIXI.AnimatedSprite(sheet.animations["student01WalkingLeft"]);
+        player.animations.walk.down = new PIXI.AnimatedSprite(sheet.animations["student01WalkingDown"]);
 
         
         player.body = new PIXI.Container();
