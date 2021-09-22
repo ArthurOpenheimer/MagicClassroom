@@ -22,6 +22,8 @@ export default function createScene(htmlDOM, PIXI) {
             height: window.innerHeight,
             backgroundColor: 0xffffff,
             resolution: 1,
+            resizeTo: window,
+            autoResize: true
         });
 
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
