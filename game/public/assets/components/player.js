@@ -37,6 +37,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         },
 
         setAnimation() {
+            this.facing();
             let newAnimation;
             if(this.input.x == 0 && this.input.y == 0) {
                 newAnimation = this.animations.idle[this._facing];
@@ -77,20 +78,26 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
             player.body.addChild(nickname);
         },
         
-        setFacing(direction) {
-            this._facing = direction;
-            this.setAnimation();
+        facing() {
+            if(this.input.y == 1){
+                this._facing = "down";
+            }
+            if(this.input.y == -1){
+                this._facing = "up";
+            }
+            if(this.input.x == 1){
+                this._facing = "right";
+            }
+            if(this.input.x == -1){
+                this._facing = "left";
+            }
         },
 
         setInputX(x){
             if(x == this.input.x) return;
             this.input.x = x;
-
-            if(x > 0) this.setFacing("right");
-            else if(x < 0) this.setFacing("left");
-            //Set idle animation
-            else this.setAnimation()
-
+            this.setAnimation();
+        
             notifyAll({
                 type: 'move-player',
                 input: this.input,
@@ -103,12 +110,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         setInputY(y){
             if(y == this.input.y) return;
             this.input.y = y;
-            
-            if(y > 0) this.setFacing("down");
-            else if(y < 0) this.setFacing("up");
-            //Set idle animation
-            else this.setAnimation()
-
+            this.setAnimation();
             notifyAll({
                 type: 'move-player',
                 input: this.input,
@@ -156,7 +158,8 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
 
         player.body.addChild(player.spriteContainer);
         player.setNickname(player.id)
-        player.setFacing("down")
+        player._facing = "down";
+        player.setAnimation();
     }
 
     setConfig()
