@@ -8,7 +8,6 @@ function main() {
 
 function connect(scene) {
     var socket = io();
-
     socket.on('connect', () => {
         console.log(`Connected in server with id: ${socket.id}`)
 
@@ -48,6 +47,20 @@ function connect(scene) {
     socket.on('chat-message', (command) => {
         scene.receiveChatMessage(command);
     })
+
+    const constraints = {
+        'audio': true,
+        'video': false
+    }
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => {
+            console.log('Got MediaStream: ', stream);
+        })
+        .catch(err => {
+            console.error('Errror acessing MediaDevices: ', err);
+        });
+
 
 }
 
