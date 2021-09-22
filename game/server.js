@@ -2,12 +2,10 @@ import express from "express"
 import http from "http"
 import { Server } from "socket.io"
 import createAbstractScene from "./components/abstractScene.js"
-import DataBaseManager from './dataBaseManager.js'
 
 const app = express()
 const httpServer = http.createServer(app)
 const sockets = new Server(httpServer);
-const dbManager = DataBaseManager()
 
 app.use(express.static("public"))
 
