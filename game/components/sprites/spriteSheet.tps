@@ -177,16 +177,38 @@
             <key>defaultPivotPoint</key>
             <point_f>0,0</point_f>
             <key>writePivotPoints</key>
-            <false/>
+            <true/>
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">floor_tiles/grass path/grass_floor1.png</key>
+            <key type="filename">floor_tiles/grass path/grass_floor2.png</key>
+            <key type="filename">floor_tiles/stone path/DownLeftCorner_path.png</key>
+            <key type="filename">floor_tiles/stone path/DownRightCorner_path.png</key>
+            <key type="filename">floor_tiles/stone path/DownSide_path.png</key>
+            <key type="filename">floor_tiles/stone path/LeftSide_path.png</key>
+            <key type="filename">floor_tiles/stone path/RightSide_path.png</key>
+            <key type="filename">floor_tiles/stone path/TopLeftCorner_path.png</key>
+            <key type="filename">floor_tiles/stone path/TopRightCorner_path.png</key>
+            <key type="filename">floor_tiles/stone path/TopSide_path.png</key>
+            <key type="filename">floor_tiles/stone path/stone_path.png</key>
+            <key type="filename">scenery_obj/bench.png</key>
+            <key type="filename">scenery_obj/fountain_1.png</key>
+            <key type="filename">scenery_obj/fountain_2.png</key>
+            <key type="filename">scenery_obj/fountain_3.png</key>
+            <key type="filename">scenery_obj/tables.png</key>
             <key type="filename">student01IdleDown_01.png</key>
             <key type="filename">student01IdleDown_02.png</key>
             <key type="filename">student01IdleLeft_01.png</key>
             <key type="filename">student01IdleLeft_02.png</key>
             <key type="filename">student01IdleRight_01.png</key>
             <key type="filename">student01IdleRight_02.png</key>
+            <key type="filename">student01IdleUp_01.png</key>
+            <key type="filename">student01IdleUp_02.png</key>
+            <key type="filename">student01WalkingDown_01.png</key>
+            <key type="filename">student01WalkingDown_02.png</key>
+            <key type="filename">student01WalkingDown_03.png</key>
+            <key type="filename">student01WalkingDown_04.png</key>
             <key type="filename">student01WalkingLeft_01.png</key>
             <key type="filename">student01WalkingLeft_02.png</key>
             <key type="filename">student01WalkingLeft_03.png</key>
@@ -195,6 +217,10 @@
             <key type="filename">student01WalkingRight_02.png</key>
             <key type="filename">student01WalkingRight_03.png</key>
             <key type="filename">student01WalkingRight_04.png</key>
+            <key type="filename">student01WalkingUp_01.png</key>
+            <key type="filename">student01WalkingUp_02.png</key>
+            <key type="filename">student01WalkingUp_03.png</key>
+            <key type="filename">student01WalkingUp_04.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -206,6 +232,36 @@
                 <rect>8,8,16,16</rect>
                 <key>scale9Paddings</key>
                 <rect>8,8,16,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">scenery_obj/mission_board.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>24,8,48,16</rect>
+                <key>scale9Paddings</key>
+                <rect>24,8,48,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">scenery_obj/shop.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>16,16,32,32</rect>
+                <key>scale9Paddings</key>
+                <rect>16,16,32,32</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -226,6 +282,34 @@
             <filename>student01IdleLeft_02.png</filename>
             <filename>student01IdleRight_01.png</filename>
             <filename>student01IdleRight_02.png</filename>
+            <filename>scenery_obj/fountain_1.png</filename>
+            <filename>scenery_obj/fountain_2.png</filename>
+            <filename>scenery_obj/fountain_3.png</filename>
+            <filename>scenery_obj/bench.png</filename>
+            <filename>scenery_obj/tables.png</filename>
+            <filename>student01IdleUp_01.png</filename>
+            <filename>student01IdleUp_02.png</filename>
+            <filename>student01WalkingDown_01.png</filename>
+            <filename>student01WalkingDown_02.png</filename>
+            <filename>student01WalkingDown_03.png</filename>
+            <filename>student01WalkingDown_04.png</filename>
+            <filename>student01WalkingUp_01.png</filename>
+            <filename>student01WalkingUp_02.png</filename>
+            <filename>student01WalkingUp_03.png</filename>
+            <filename>student01WalkingUp_04.png</filename>
+            <filename>scenery_obj/mission_board.png</filename>
+            <filename>scenery_obj/shop.png</filename>
+            <filename>floor_tiles/grass path/grass_floor1.png</filename>
+            <filename>floor_tiles/grass path/grass_floor2.png</filename>
+            <filename>floor_tiles/stone path/DownLeftCorner_path.png</filename>
+            <filename>floor_tiles/stone path/DownRightCorner_path.png</filename>
+            <filename>floor_tiles/stone path/DownSide_path.png</filename>
+            <filename>floor_tiles/stone path/LeftSide_path.png</filename>
+            <filename>floor_tiles/stone path/RightSide_path.png</filename>
+            <filename>floor_tiles/stone path/TopLeftCorner_path.png</filename>
+            <filename>floor_tiles/stone path/TopRightCorner_path.png</filename>
+            <filename>floor_tiles/stone path/TopSide_path.png</filename>
+            <filename>floor_tiles/stone path/stone_path.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
