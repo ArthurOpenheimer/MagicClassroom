@@ -1,6 +1,7 @@
 import createPlayer from "./player.js";
 import createKeyListner from "./keyboard-listner.js";
 import createChat from "./chat.js";
+import createGameObject from "./gameObject.js";
 
 export default function createScene(htmlDOM, PIXI) {
     let left, up, down, right;
@@ -103,38 +104,9 @@ export default function createScene(htmlDOM, PIXI) {
     }
 
     function constructMap(){
-        let fountainAnimation = new PIXI.AnimatedSprite(sheet.animations["fountain"]);
-        fountainAnimation.x = 1200;
-        fountainAnimation.y = 400;
-        fountainAnimation.animationSpeed = 0.2;
-        fountainAnimation.scale.set(8,8);
-        fountainAnimation.play();
-        addOnStage(fountainAnimation, "objects");
-        
-        let shop = new PIXI.Sprite(sheet.textures["shop.png"]);
-        shop.x = 300;
-        shop.y = 100;
-        shop.scale.set(7,7);
-        addOnStage(shop, "objects");
+        let shop1 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 400, y: 400}, false);
+        addOnStage(shop1)
 
-        let missionBoard = new PIXI.Sprite(sheet.textures["mission_board.png"]);
-        missionBoard.x = 680;
-        missionBoard.y = 250;
-        missionBoard.scale.set(3,3);
-        addOnStage(missionBoard, "objects"); 
-
-        let bench = new PIXI.Sprite(sheet.textures["bench.png"]);
-        bench.x = 710;
-        bench.y = 600;
-        bench.scale.set(3,3);
-        addOnStage(bench, "objects");   
-        
-        
-        let tables = new PIXI.Sprite(sheet.textures["tables.png"]);
-        tables.x = 630;
-        tables.y = 600;
-        tables.scale.set(4,4);
-        addOnStage(tables, "objects"); 
 
         let grass = new PIXI.TilingSprite(
             sheet.textures["grass_floor1.png"],
@@ -146,8 +118,6 @@ export default function createScene(htmlDOM, PIXI) {
         grass.anchor.set(0)
         grass.scale.set(2,2);
         addOnStage(grass, "background")
-
-    
     }
 
     function receiveChatMessage(msg){
