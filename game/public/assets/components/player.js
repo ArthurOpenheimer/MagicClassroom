@@ -73,8 +73,8 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
 
         setNickname(nick){
             let nickname = new PIXI.Text(`${nick}`,{fontFamily : 'Arial', fontSize: 15, fill : 0x000000, align : 'center'});
-            nickname.y -= 25;
-            nickname.x -= nickname.width/2 - 48;
+            nickname.y -= 70;
+            nickname.x -= nickname.width/2;
             player.body.addChild(nickname);
         },
         
@@ -160,6 +160,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         player.setNickname(player.id)
         player._facing = "down";
         player.setAnimation();
+
     }
 
     setConfig()
