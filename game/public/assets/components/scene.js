@@ -7,12 +7,14 @@ export default function createScene(htmlDOM, PIXI) {
     let left, up, down, right;
     let observers = [];
     let app;
+    let currentPlayer;
     let currentPlayerId;
     let sheet;
     let chat;
     let state = {
         players: {},
     }
+    let colideableGameObjects = [];
     let map = [];
     let layers = {
         players: new PIXI.Container(),
@@ -67,6 +69,7 @@ export default function createScene(htmlDOM, PIXI) {
     function setup(clientId, newState){ 
         currentPlayerId = clientId;
         setState(newState);
+        currentPlayer = state.players[currentPlayerId];
         app.stage.SORTABLE_CHILDREN = true;
 
         layerManager.addChild(layers.background);
@@ -80,7 +83,7 @@ export default function createScene(htmlDOM, PIXI) {
         app.stage.addChild(layerManager);
 
 
-
+        ticker.add(delta => update(delta));
         subscribeKeys();
         
         chat = createChat(PIXI, app, (message) =>{
@@ -103,10 +106,49 @@ export default function createScene(htmlDOM, PIXI) {
         constructMap(/* receipe */);
     }
 
-    function constructMap(){
-        let shop1 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 400, y: 400}, false);
-        addOnStage(shop1)
+    function update(delta) {
+        checkCollision();
+    }
 
+    function checkCollision() {
+        if(!colideableGameObjects) return
+        colideableGameObjects.forEach(obj => {
+            if(boxesIntersect(currentPlayer.spriteContainer, obj)){
+                console.log("colidiu")
+                if(currentPlayer._facing == "right" || currentPlayer._facing == "left") currentPlayer.input.x = 0;
+                else currentPlayer.input.y = 0; 
+                currentPlayer.blockedDirections.push(currentPlayer._facing);
+                console.log(obj.x)
+                console.log(currentPlayer.spriteContainer.getBounds().x + currentPlayer.spriteContainer.getBounds().width)
+            }
+            else{
+                currentPlayer.blockedDirections = []
+            }
+
+        });
+    }
+
+    function boxesIntersect(a, b)
+    {
+        var ab = a.getBounds();
+        var bb = b.getBounds();
+    
+        return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
+    }
+
+    function addColision(obj){
+        colideableGameObjects.push(obj);
+        console.log(colideableGameObjects)
+    }
+
+    function constructMap(){
+        let shop1 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 600, y: 400}, false);
+        addOnStage(shop1)
+        addColision(shop1)
+
+        let shop2 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 300, y: 400}, false);
+        addOnStage(shop2)
+        addColision(shop2)
 
         let grass = new PIXI.TilingSprite(
             sheet.textures["grass_floor1.png"],
