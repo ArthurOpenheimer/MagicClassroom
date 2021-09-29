@@ -1,12 +1,12 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "analytics": "3bdfefe5-479c-492a-8e2e-7f6b3d67d956"
+    "analytics": "39cd92ef-29f4-4e0d-8249-fe409ec20c78"
   },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "magic-moodle": {
+    "Magic-Moodle": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/magic-moodle",
+            "outputPath": "dist/Magic-Moodle",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -71,10 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "magic-moodle:build:production"
+              "browserTarget": "Magic-Moodle:build:production"
             },
             "development": {
-              "browserTarget": "magic-moodle:build:development"
+              "browserTarget": "Magic-Moodle:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "magic-moodle:build"
+            "browserTarget": "Magic-Moodle:build"
           }
         },
         "test": {
@@ -105,5 +105,5 @@
       }
     }
   },
-  "defaultProject": "magic-moodle"
+  "defaultProject": "Magic-Moodle"
 }

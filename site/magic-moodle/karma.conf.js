@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/magic-moodle'),
+      dir: require('path').join(__dirname, './coverage/Magic-Moodle'),
       subdir: '.',
       reporters: [
         { type: 'html' },
