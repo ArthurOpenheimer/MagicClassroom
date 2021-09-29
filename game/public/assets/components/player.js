@@ -26,6 +26,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
             x: 0,
             y: 0,
         },
+        blockedDirections: [],
         
         move(delta) {
             let diagonalAjust = 1;
@@ -94,6 +95,24 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         },
 
         setInputX(x){
+            let cantMove = false;
+            if(x > 0) {
+                this.blockedDirections.forEach(dir => {
+                    if(dir == "right"){
+                        cantMove = true;
+                        return
+                    }
+                });
+            }
+            else if( x < 0) {
+                this.blockedDirections.forEach(dir => {
+                    if(dir == "left"){
+                        cantMove = true;
+                        return
+                    }
+                });
+            }
+            if(cantMove) return;
             if(x == this.input.x) return;
             this.input.x = x;
             this.setAnimation();
@@ -108,6 +127,19 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         },
 
         setInputY(y){
+            let cantMove = false;
+            if(y > 0) {
+                this.blockedDirections.forEach(dir => {
+                    if(dir == "down") cantMove = true;
+                });
+            }
+            else if( y < 0) {
+                this.blockedDirections.forEach(dir => {
+                    if(dir == "up") cantMove = true;
+                });
+            }
+
+            if(cantMove) return;
             if(y == this.input.y) return;
             this.input.y = y;
             this.setAnimation();

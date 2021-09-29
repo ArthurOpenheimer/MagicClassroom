@@ -1,17 +1,20 @@
 import createPlayer from "./player.js";
 import createKeyListner from "./keyboard-listner.js";
 import createChat from "./chat.js";
+import createGameObject from "./gameObject.js";
 
 export default function createScene(htmlDOM, PIXI) {
     let left, up, down, right;
     let observers = [];
     let app;
+    let currentPlayer;
     let currentPlayerId;
     let sheet;
     let chat;
     let state = {
         players: {},
     }
+    let colideableGameObjects = [];
     let map = [];
     let layers = {
         players: new PIXI.Container(),
@@ -66,6 +69,7 @@ export default function createScene(htmlDOM, PIXI) {
     function setup(clientId, newState){ 
         currentPlayerId = clientId;
         setState(newState);
+        currentPlayer = state.players[currentPlayerId];
         app.stage.SORTABLE_CHILDREN = true;
 
         layerManager.addChild(layers.background);
@@ -79,7 +83,7 @@ export default function createScene(htmlDOM, PIXI) {
         app.stage.addChild(layerManager);
 
 
-
+        ticker.add(delta => update(delta));
         subscribeKeys();
         
         chat = createChat(PIXI, app, (message) =>{
@@ -102,39 +106,49 @@ export default function createScene(htmlDOM, PIXI) {
         constructMap(/* receipe */);
     }
 
+    function update(delta) {
+        checkCollision();
+    }
+
+    function checkCollision() {
+        if(!colideableGameObjects) return
+        colideableGameObjects.forEach(obj => {
+            if(boxesIntersect(currentPlayer.spriteContainer, obj)){
+                console.log("colidiu")
+                if(currentPlayer._facing == "right" || currentPlayer._facing == "left") currentPlayer.input.x = 0;
+                else currentPlayer.input.y = 0; 
+                currentPlayer.blockedDirections.push(currentPlayer._facing);
+                console.log(obj.x)
+                console.log(currentPlayer.spriteContainer.getBounds().x + currentPlayer.spriteContainer.getBounds().width)
+            }
+            else{
+                currentPlayer.blockedDirections = []
+            }
+
+        });
+    }
+
+    function boxesIntersect(a, b)
+    {
+        var ab = a.getBounds();
+        var bb = b.getBounds();
+    
+        return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
+    }
+
+    function addColision(obj){
+        colideableGameObjects.push(obj);
+        console.log(colideableGameObjects)
+    }
+
     function constructMap(){
-        let fountainAnimation = new PIXI.AnimatedSprite(sheet.animations["fountain"]);
-        fountainAnimation.x = 1200;
-        fountainAnimation.y = 400;
-        fountainAnimation.animationSpeed = 0.2;
-        fountainAnimation.scale.set(8,8);
-        fountainAnimation.play();
-        addOnStage(fountainAnimation, "objects");
-        
-        let shop = new PIXI.Sprite(sheet.textures["shop.png"]);
-        shop.x = 300;
-        shop.y = 100;
-        shop.scale.set(7,7);
-        addOnStage(shop, "objects");
+        let shop1 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 600, y: 400}, false);
+        addOnStage(shop1)
+        addColision(shop1)
 
-        let missionBoard = new PIXI.Sprite(sheet.textures["mission_board.png"]);
-        missionBoard.x = 680;
-        missionBoard.y = 250;
-        missionBoard.scale.set(3,3);
-        addOnStage(missionBoard, "objects"); 
-
-        let bench = new PIXI.Sprite(sheet.textures["bench.png"]);
-        bench.x = 710;
-        bench.y = 600;
-        bench.scale.set(3,3);
-        addOnStage(bench, "objects");   
-        
-        
-        let tables = new PIXI.Sprite(sheet.textures["tables.png"]);
-        tables.x = 630;
-        tables.y = 600;
-        tables.scale.set(4,4);
-        addOnStage(tables, "objects"); 
+        let shop2 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 300, y: 400}, false);
+        addOnStage(shop2)
+        addColision(shop2)
 
         let grass = new PIXI.TilingSprite(
             sheet.textures["grass_floor1.png"],
@@ -146,8 +160,6 @@ export default function createScene(htmlDOM, PIXI) {
         grass.anchor.set(0)
         grass.scale.set(2,2);
         addOnStage(grass, "background")
-
-    
     }
 
     function receiveChatMessage(msg){

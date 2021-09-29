@@ -60,8 +60,6 @@ function connect(scene) {
         .catch(err => {
             console.error('Errror acessing MediaDevices: ', err);
         });
-
-
 }
 
 main();
