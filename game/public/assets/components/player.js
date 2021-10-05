@@ -29,8 +29,8 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         blockedDirections: [],
         
         move(delta) {
-            this.body.x += this.input.x * this.velocity * delta * diagonalAjust;
-            this.body.y += this.input.y * this.velocity * delta * diagonalAjust;
+            this.body.x += this.input.x * this.velocity * delta;
+            this.body.y += this.input.y * this.velocity * delta;
         },
 
         setAnimation() {
