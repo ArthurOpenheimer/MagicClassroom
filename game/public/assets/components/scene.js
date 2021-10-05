@@ -114,12 +114,28 @@ export default function createScene(htmlDOM, PIXI) {
         if(!colideableGameObjects) return
         colideableGameObjects.forEach(obj => {
             if(boxesIntersect(currentPlayer.spriteContainer, obj)){
-                console.log("colidiu")
-                if(currentPlayer._facing == "right" || currentPlayer._facing == "left") currentPlayer.input.x = 0;
-                else currentPlayer.input.y = 0; 
+                let dir = currentPlayer._facing;
+                switch(dir){
+                    case "up":
+                        currentPlayer.input.y = 0; 
+                        currentPlayer.body.y += 2
+                        break;
+                    case "down":
+                        currentPlayer.input.y = 0; 
+                        currentPlayer.body.y -= 2
+                        break;
+                    case "left": 
+                        currentPlayer.input.x = 0
+                        currentPlayer.body.x += 2
+                        break;
+                    case "right":
+                        currentPlayer.input.x = 0
+                        currentPlayer.body.x -= 2
+                        break;
+                    default:
+                        break;
+                }
                 currentPlayer.blockedDirections.push(currentPlayer._facing);
-                console.log(obj.x)
-                console.log(currentPlayer.spriteContainer.getBounds().x + currentPlayer.spriteContainer.getBounds().width)
             }
             else{
                 currentPlayer.blockedDirections = []
@@ -132,7 +148,7 @@ export default function createScene(htmlDOM, PIXI) {
     {
         var ab = a.getBounds();
         var bb = b.getBounds();
-    
+        
         return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
     }
 
@@ -212,22 +228,27 @@ export default function createScene(htmlDOM, PIXI) {
 
     function setKeyInputs(){  
         const player = state.players[currentPlayerId];
-
         left.press = () => {
-            if(right.isDown) return;
+            if(right.isDown || up.isDown || down.isDown) return;
+            
             player.setInputX(-1);
         };
 
         left.release = () => {
             if(right.isDown) {
                 player.setInputX(1);
-                return;
+            }
+            else if(up.isDown){
+                player.setInputY(-1);
+            }
+            else if(down.isDown){
+                player.setInputY(1);
             }
             player.setInputX(0)
         };
 
         right.press = () => {
-            if(left.isDown) return;
+            if(left.isDown || up.isDown || down.isDown) return;
             player.setInputX(1);
         };
 
@@ -236,11 +257,17 @@ export default function createScene(htmlDOM, PIXI) {
                 player.setInputX(-1);
                 return;
             }
+            else if(up.isDown){
+                player.setInputY(-1);
+            }
+            else if(down.isDown){
+                player.setInputY(1);
+            }
             player.setInputX(0)
         };
 
         up.press = () => {
-            if(down.isDown) return
+            if(down.isDown || left.isDown || right.isDown) return
             player.setInputY(-1)
         };
 
@@ -249,11 +276,17 @@ export default function createScene(htmlDOM, PIXI) {
                 player.setInputY(1)
                 return
             }
+            else if(left.isDown){
+                player.setInputX(-1);
+            }
+            else if(right.isDown){
+                player.setInputX(1);
+            }
             player.setInputY(0)
         };
 
         down.press = () => {
-            if(up.isDown) return;
+            if(up.isDown || left.isDown || right.isDown) return;
             player.setInputY(1);
         };
 
@@ -261,6 +294,12 @@ export default function createScene(htmlDOM, PIXI) {
             if(up.isDown){
                 player.setInputY(-1);
                 return;
+            }
+            else if(left.isDown){
+                player.setInputX(-1);
+            }
+            else if(right.isDown){
+                player.setInputX(1);
             }
             player.setInputY(0);
         };
