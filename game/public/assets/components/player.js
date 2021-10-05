@@ -29,10 +29,6 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         blockedDirections: [],
         
         move(delta) {
-            let diagonalAjust = 1;
-            if(this.input.x !=   0 && this.input.y != 0){
-                diagonalAjust = (Math.sqrt(2)/2);
-            }
             this.body.x += this.input.x * this.velocity * delta * diagonalAjust;
             this.body.y += this.input.y * this.velocity * delta * diagonalAjust;
         },
