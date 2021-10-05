@@ -15,7 +15,6 @@ export default function createScene(htmlDOM, PIXI) {
         players: {},
     }
     let colideableGameObjects = [];
-    let map = [];
     let layers = {
         players: new PIXI.Container(),
         background: new PIXI.Container(),
@@ -30,12 +29,10 @@ export default function createScene(htmlDOM, PIXI) {
     function init(element){
         app = new PIXI.Application({
             view: element,
-            width: window.innerWidth,
-            height: window.innerHeight,
+            width: 1152,
+            height: 648,
             backgroundColor: 0xffffff,
             resolution: 1,
-            resizeTo: window,
-            autoResize: true
         });
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
         PIXI.settings.ROUND_PIXELS = true;
@@ -47,6 +44,7 @@ export default function createScene(htmlDOM, PIXI) {
     function loadAssets(){
         
         loader.add("assets/sprites/spriteSheet.json");
+        loader.add("assets/sprites/lobby_map.png");
 
         loader.load((loader, resources) => {
             sheet = resources["assets/sprites/spriteSheet.json"].spritesheet;
@@ -115,6 +113,7 @@ export default function createScene(htmlDOM, PIXI) {
         colideableGameObjects.forEach(obj => {
             if(boxesIntersect(currentPlayer.spriteContainer, obj)){
                 let dir = currentPlayer._facing;
+                currentPlayer.setAnimation();
                 switch(dir){
                     case "up":
                         currentPlayer.input.y = 0; 
@@ -147,35 +146,40 @@ export default function createScene(htmlDOM, PIXI) {
     function boxesIntersect(a, b)
     {
         var ab = a.getBounds();
-        var bb = b.getBounds();
-        
+        ab.width = ab.width/2;
+        ab.x += ab.width/2; 
+        var bb = {x: b.body.x + b.boxCollider.xAjust, y: b.body.y + b.boxCollider.yAjust, width: b.boxCollider.width, height: b.boxCollider.height};
         return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
     }
 
     function addColision(obj){
         colideableGameObjects.push(obj);
-        console.log(colideableGameObjects)
     }
 
     function constructMap(){
-        let shop1 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 600, y: 400}, false);
-        addOnStage(shop1)
-        addColision(shop1)
+        let map = createGameObject(PIXI, sheet.textures["lobby_map.png"], {x: 0, y: 0}, false);
+        map.sprite.scale.set(0.6,0.6);
+        addOnStage(map.sprite, "background");
 
-        let shop2 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 300, y: 400}, false);
-        addOnStage(shop2)
-        addColision(shop2)
+        let shop = createGameObject(PIXI, sheet.textures["shop.png"], {x: -45, y: -66}, false);
+        addOnStage(shop.body)
+        shop.sprite.scale.set(5,5)
+        shop.boxCollider = {width: shop.sprite.width, height: shop.sprite.height - 50, xAjust: 0, yAjust: 0};
+        addColision(shop)
 
-        let grass = new PIXI.TilingSprite(
-            sheet.textures["grass_floor1.png"],
-            1000,
-            1000
-        );
-        grass.x = 0;
-        grass.y = 0;
-        grass.anchor.set(0)
-        grass.scale.set(2,2);
-        addOnStage(grass, "background")
+        let fountain = createGameObject(PIXI, sheet.animations["fountain"], {x: 450, y: 250}, true);
+        fountain.sprite.scale.set(7,5)
+        fountain.boxCollider = {width: fountain.sprite.width - 10, height: fountain.sprite.height - 120, xAjust: 10, yAjust: 70};
+        fountain.sprite.animationSpeed = 0.2
+        addOnStage(fountain.body);
+        addColision(fountain)
+
+        let board = createGameObject(PIXI, sheet.textures["mission_board.png"],{x: 350, y: 50}, false);
+        board.sprite.scale.set(4,4);
+        board.boxCollider = {width: board.sprite.width, height: board.sprite.height - 50, xAjust: 0, yAjust: 0};
+        addColision(board)
+        addOnStage(board.body)
+
     }
 
     function receiveChatMessage(msg){
