@@ -177,7 +177,7 @@
             <key>defaultPivotPoint</key>
             <point_f>0,0</point_f>
             <key>writePivotPoints</key>
-            <true/>
+            <false/>
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
@@ -232,6 +232,21 @@
                 <rect>8,8,16,16</rect>
                 <key>scale9Paddings</key>
                 <rect>8,8,16,16</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">floor_tiles/lobby_map.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>480,270,960,540</rect>
+                <key>scale9Paddings</key>
+                <rect>480,270,960,540</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -310,6 +325,7 @@
             <filename>floor_tiles/stone path/TopRightCorner_path.png</filename>
             <filename>floor_tiles/stone path/TopSide_path.png</filename>
             <filename>floor_tiles/stone path/stone_path.png</filename>
+            <filename>floor_tiles/lobby_map.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

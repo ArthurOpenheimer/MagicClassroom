@@ -15,7 +15,6 @@ export default function createScene(htmlDOM, PIXI) {
         players: {},
     }
     let colideableGameObjects = [];
-    let map = [];
     let layers = {
         players: new PIXI.Container(),
         background: new PIXI.Container(),
@@ -30,12 +29,10 @@ export default function createScene(htmlDOM, PIXI) {
     function init(element){
         app = new PIXI.Application({
             view: element,
-            width: window.innerWidth,
-            height: window.innerHeight,
+            width: 1152,
+            height: 648,
             backgroundColor: 0xffffff,
             resolution: 1,
-            resizeTo: window,
-            autoResize: true
         });
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
         PIXI.settings.ROUND_PIXELS = true;
@@ -47,6 +44,7 @@ export default function createScene(htmlDOM, PIXI) {
     function loadAssets(){
         
         loader.add("assets/sprites/spriteSheet.json");
+        loader.add("assets/sprites/lobby_map.png");
 
         loader.load((loader, resources) => {
             sheet = resources["assets/sprites/spriteSheet.json"].spritesheet;
@@ -114,12 +112,29 @@ export default function createScene(htmlDOM, PIXI) {
         if(!colideableGameObjects) return
         colideableGameObjects.forEach(obj => {
             if(boxesIntersect(currentPlayer.spriteContainer, obj)){
-                console.log("colidiu")
-                if(currentPlayer._facing == "right" || currentPlayer._facing == "left") currentPlayer.input.x = 0;
-                else currentPlayer.input.y = 0; 
+                let dir = currentPlayer._facing;
+                currentPlayer.setAnimation();
+                switch(dir){
+                    case "up":
+                        currentPlayer.input.y = 0; 
+                        currentPlayer.body.y += 2
+                        break;
+                    case "down":
+                        currentPlayer.input.y = 0; 
+                        currentPlayer.body.y -= 2
+                        break;
+                    case "left": 
+                        currentPlayer.input.x = 0
+                        currentPlayer.body.x += 2
+                        break;
+                    case "right":
+                        currentPlayer.input.x = 0
+                        currentPlayer.body.x -= 2
+                        break;
+                    default:
+                        break;
+                }
                 currentPlayer.blockedDirections.push(currentPlayer._facing);
-                console.log(obj.x)
-                console.log(currentPlayer.spriteContainer.getBounds().x + currentPlayer.spriteContainer.getBounds().width)
             }
             else{
                 currentPlayer.blockedDirections = []
@@ -131,35 +146,40 @@ export default function createScene(htmlDOM, PIXI) {
     function boxesIntersect(a, b)
     {
         var ab = a.getBounds();
-        var bb = b.getBounds();
-    
+        ab.width = ab.width/2;
+        ab.x += ab.width/2; 
+        var bb = {x: b.body.x + b.boxCollider.xAjust, y: b.body.y + b.boxCollider.yAjust, width: b.boxCollider.width, height: b.boxCollider.height};
         return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
     }
 
     function addColision(obj){
         colideableGameObjects.push(obj);
-        console.log(colideableGameObjects)
     }
 
     function constructMap(){
-        let shop1 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 600, y: 400}, false);
-        addOnStage(shop1)
-        addColision(shop1)
+        let map = createGameObject(PIXI, sheet.textures["lobby_map.png"], {x: 0, y: 0}, false);
+        map.sprite.scale.set(0.6,0.6);
+        addOnStage(map.sprite, "background");
 
-        let shop2 = createGameObject(PIXI, sheet.textures["shop.png"], {x: 300, y: 400}, false);
-        addOnStage(shop2)
-        addColision(shop2)
+        let shop = createGameObject(PIXI, sheet.textures["shop.png"], {x: -45, y: -66}, false);
+        addOnStage(shop.body)
+        shop.sprite.scale.set(5,5)
+        shop.boxCollider = {width: shop.sprite.width, height: shop.sprite.height - 50, xAjust: 0, yAjust: 0};
+        addColision(shop)
 
-        let grass = new PIXI.TilingSprite(
-            sheet.textures["grass_floor1.png"],
-            1000,
-            1000
-        );
-        grass.x = 0;
-        grass.y = 0;
-        grass.anchor.set(0)
-        grass.scale.set(2,2);
-        addOnStage(grass, "background")
+        let fountain = createGameObject(PIXI, sheet.animations["fountain"], {x: 450, y: 250}, true);
+        fountain.sprite.scale.set(7,5)
+        fountain.boxCollider = {width: fountain.sprite.width - 10, height: fountain.sprite.height - 120, xAjust: 10, yAjust: 70};
+        fountain.sprite.animationSpeed = 0.2
+        addOnStage(fountain.body);
+        addColision(fountain)
+
+        let board = createGameObject(PIXI, sheet.textures["mission_board.png"],{x: 350, y: 50}, false);
+        board.sprite.scale.set(4,4);
+        board.boxCollider = {width: board.sprite.width, height: board.sprite.height - 50, xAjust: 0, yAjust: 0};
+        addColision(board)
+        addOnStage(board.body)
+
     }
 
     function receiveChatMessage(msg){
@@ -212,22 +232,27 @@ export default function createScene(htmlDOM, PIXI) {
 
     function setKeyInputs(){  
         const player = state.players[currentPlayerId];
-
         left.press = () => {
-            if(right.isDown) return;
+            if(right.isDown || up.isDown || down.isDown) return;
+            
             player.setInputX(-1);
         };
 
         left.release = () => {
             if(right.isDown) {
                 player.setInputX(1);
-                return;
+            }
+            else if(up.isDown){
+                player.setInputY(-1);
+            }
+            else if(down.isDown){
+                player.setInputY(1);
             }
             player.setInputX(0)
         };
 
         right.press = () => {
-            if(left.isDown) return;
+            if(left.isDown || up.isDown || down.isDown) return;
             player.setInputX(1);
         };
 
@@ -236,11 +261,17 @@ export default function createScene(htmlDOM, PIXI) {
                 player.setInputX(-1);
                 return;
             }
+            else if(up.isDown){
+                player.setInputY(-1);
+            }
+            else if(down.isDown){
+                player.setInputY(1);
+            }
             player.setInputX(0)
         };
 
         up.press = () => {
-            if(down.isDown) return
+            if(down.isDown || left.isDown || right.isDown) return
             player.setInputY(-1)
         };
 
@@ -249,11 +280,17 @@ export default function createScene(htmlDOM, PIXI) {
                 player.setInputY(1)
                 return
             }
+            else if(left.isDown){
+                player.setInputX(-1);
+            }
+            else if(right.isDown){
+                player.setInputX(1);
+            }
             player.setInputY(0)
         };
 
         down.press = () => {
-            if(up.isDown) return;
+            if(up.isDown || left.isDown || right.isDown) return;
             player.setInputY(1);
         };
 
@@ -261,6 +298,12 @@ export default function createScene(htmlDOM, PIXI) {
             if(up.isDown){
                 player.setInputY(-1);
                 return;
+            }
+            else if(left.isDown){
+                player.setInputX(-1);
+            }
+            else if(right.isDown){
+                player.setInputX(1);
             }
             player.setInputY(0);
         };

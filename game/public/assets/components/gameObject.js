@@ -1,15 +1,20 @@
 export default function createGameObject(PIXI, texture, position, animated) {
-    let gameObject;
+    let gameObject = {
+        body: new PIXI.Container(),
+        sprite: new PIXI.Container(),
+        boxCollider : null,
+    };
+
     if(animated) {
-        gameObject = new PIXI.AnimateSprite(texture);
-        gameObject.play();
+        gameObject.sprite = new PIXI.AnimatedSprite(texture);
+        gameObject.sprite.play();
     }
     else {
-        gameObject = new PIXI.Sprite(texture);
+        gameObject.sprite = new PIXI.Sprite(texture);
     }
-
-    gameObject.x = position.x;
-    gameObject.y = position.x;
+    gameObject.body.addChild(gameObject.sprite)
+    gameObject.body.x = position.x;
+    gameObject.body.y = position.y;
     
     return gameObject;
 }

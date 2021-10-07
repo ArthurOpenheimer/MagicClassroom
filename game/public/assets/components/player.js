@@ -29,12 +29,8 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         blockedDirections: [],
         
         move(delta) {
-            let diagonalAjust = 1;
-            if(this.input.x !=   0 && this.input.y != 0){
-                diagonalAjust = (Math.sqrt(2)/2);
-            }
-            this.body.x += this.input.x * this.velocity * delta * diagonalAjust;
-            this.body.y += this.input.y * this.velocity * delta * diagonalAjust;
+            this.body.x += this.input.x * this.velocity * delta;
+            this.body.y += this.input.y * this.velocity * delta;
         },
 
         setAnimation() {
@@ -186,7 +182,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         
         player.body = new PIXI.Container();
         player.spriteContainer = new PIXI.Container();
-        player.spriteContainer.scale.set(3,3)
+        player.spriteContainer.scale.set(2.6,2.6)
 
         player.body.addChild(player.spriteContainer);
         player.setNickname(player.id)

@@ -39,7 +39,7 @@ export default function createChat(PIXI, app, callBack) {
         },
 
         receiveMessage(msg) {
-            const message = new PIXI.Text(msg.id+": "+msg.text, {fontFamily : 'Arial', fontSize: 12, fill : 0xffffff, align : 'center'});
+            const message = new PIXI.Text(msg.id+": "+msg.text, {fontFamily : 'Arial', fontSize: 10, fill : 0xffffff, align : 'center'});
             this.messages.addChild(message);
             this.messages.children.forEach(element => {
                 element.y -= 15;
@@ -71,7 +71,7 @@ export default function createChat(PIXI, app, callBack) {
         chat.body.sortableChildren = true;
         chat.x = 0;
         chat.y = app.renderer.height;
-        chat.setSize({width: 300, height: 300});
+        chat.setSize({width: 200, height: 200});
 
         chat.setBackgroundColor(0x1C1C1C, 0.6);
         chat._backgroundGraphic.interactive = true;
