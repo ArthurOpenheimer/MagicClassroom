@@ -106,9 +106,10 @@ export default function createScene(htmlDOM, PIXI) {
         subscribeKeys();
         
         chat = createChat(PIXI, app, (message) =>{
+            console.log(message.name)
             notifyAll({
                 type: 'chat-message',
-                id: clientId,
+                id: currentPlayer.name,
                 text: message,
             })
         });
@@ -319,7 +320,7 @@ export default function createScene(htmlDOM, PIXI) {
     }
 
     function addPlayer(newPlayer){
-        const player = createPlayer(newPlayer.id, notifyAll, PIXI, sheet);
+        const player = createPlayer(newPlayer.id, notifyAll, PIXI, sheet, newPlayer.name);
 
         player.spriteId = newPlayer.spriteId;
         player.velocity = newPlayer.velocity;

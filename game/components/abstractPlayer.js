@@ -2,6 +2,7 @@ export default function createAbstractPlayer(playerId){
 
     let player = {
         id: playerId,
+        name: null,
         spriteId: null,
         x: 0,
         y: 0,

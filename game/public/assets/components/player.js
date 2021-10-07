@@ -1,8 +1,9 @@
-export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
+export default function createPlayer(playerId, notifyAll, PIXI, sheet, newName) {
 
     let player = {
         spriteContainer: null,
         body: null,
+        name: newName,
         currentAnimation: null,
         location: "lobby",
         animations: {
@@ -81,8 +82,10 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
 
         setNickname(nick){
             let nickname = new PIXI.Text(`${nick}`,{fontFamily : 'Arial', fontSize: 15, fill : 0x000000, align : 'center'});
+            nickname.anchor.set(0.5)
             nickname.y = this.spriteContainer.y - 20;
-            nickname.x = this.spriteContainer.x - 20;
+            nickname.x = 40;
+
             player.body.addChild(nickname);
         },
         
@@ -196,7 +199,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         player.spriteContainer.scale.set(2.6,2.6)
 
         player.body.addChild(player.spriteContainer);
-        player.setNickname(player.id)
+        player.setNickname(player.name)
         player._facing = "down";
         player.setAnimation();
 
