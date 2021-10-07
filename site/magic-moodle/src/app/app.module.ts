@@ -16,6 +16,11 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { GameComponent } from './game/game.component';
 import { SubjectsComponent } from './subjects/subjects.component';
+import { PortComponent } from './port/port.component';
+import { MatComponent } from './mat/mat.component';
+import { RedComponent } from './red/red.component';
+import { SocComponent } from './soc/soc.component';
+import { SdComponent } from './sd/sd.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +33,12 @@ import { SubjectsComponent } from './subjects/subjects.component';
     BoardModeratorComponent,
     BoardUserComponent,
     GameComponent,
-    SubjectsComponent
+    SubjectsComponent,
+    PortComponent,
+    MatComponent,
+    RedComponent,
+    SocComponent,
+    SdComponent
   ],
   imports: [
     BrowserModule,
