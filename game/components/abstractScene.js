@@ -13,8 +13,8 @@ export default function createAbstractScene(){
         const player = createAbstractPlayer(playerId);
         player.spriteId = "student01";
         player.setPosition({
-            x: Math.floor(Math.random() * 400 + 100),
-            y: Math.floor(Math.random() * 400 + 100),
+            x: 50,
+            y: 400,
         });
         player.velocity = 5;
 
