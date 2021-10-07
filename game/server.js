@@ -30,6 +30,10 @@ sockets.on('connection', (socket) => {
         scene.movePlayer(command);
     });
     
+    socket.on('collision-detection', (command) => {
+        scene.collisionManager(command);
+    });
+
     socket.on('chat-message', (commad) => {
         scene.sendChatMessage(commad);
     })
