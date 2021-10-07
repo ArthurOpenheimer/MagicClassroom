@@ -40,6 +40,7 @@ export default function createChat(PIXI, app, callBack) {
 
         receiveMessage(msg) {
             const message = new PIXI.Text(msg.id+": "+msg.text, {fontFamily : 'Arial', fontSize: 10, fill : 0xffffff, align : 'center'});
+            if(message.width > 160) return
             this.messages.addChild(message);
             this.messages.children.forEach(element => {
                 element.y -= 15;
