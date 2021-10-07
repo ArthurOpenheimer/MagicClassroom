@@ -47,6 +47,10 @@ export default function createAbstractScene(){
         player.input = movement.input;
     }
 
+    function collisionManager(collision) {
+        notifyAll(collision);
+    }
+
     function subscribe(observerFunction) {
         observers.push(observerFunction);
     }
@@ -65,6 +69,7 @@ export default function createAbstractScene(){
         addPlayer,
         removePlayer,
         movePlayer,
+        collisionManager,
         subscribe,
     };  
 }

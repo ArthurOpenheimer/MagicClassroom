@@ -4,6 +4,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         spriteContainer: null,
         body: null,
         currentAnimation: null,
+        location: "lobby",
         animations: {
             idle: {
                 up: null,
@@ -57,11 +58,21 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
             this.currentAnimation = newAnimation;
         },
 
-        setPosition(position) {
+        setPosition(position, notify) {
             if(!position.x && !position.y) return 
 
             this.body.x = position.x;
             this.body.y = position.y;
+
+            if(notify){
+                notifyAll({
+                    type: 'move-player',
+                    input: this.input,
+                    facing: this.getFacing(),
+                    position: this.getPosition(),
+                    id: this.id,
+                })
+            }
         },
 
         setSprite(spriteId) {
@@ -70,8 +81,8 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
 
         setNickname(nick){
             let nickname = new PIXI.Text(`${nick}`,{fontFamily : 'Arial', fontSize: 15, fill : 0x000000, align : 'center'});
-            nickname.y -= 70;
-            nickname.x -= nickname.width/2;
+            nickname.y = this.spriteContainer.y - 20;
+            nickname.x = this.spriteContainer.x - 20;
             player.body.addChild(nickname);
         },
         
