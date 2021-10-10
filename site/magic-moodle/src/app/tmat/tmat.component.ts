@@ -6,7 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tmat.component.css']
 })
 export class TmatComponent implements OnInit {
+  wasPressed = false;
+  sent = false;
 
+  click(state: any) {
+    this.wasPressed = state;
+    this.sent = false;
+  }
+
+  send() {
+    this.sent = true;
+  }
   constructor() { }
 
   ngOnInit(): void {

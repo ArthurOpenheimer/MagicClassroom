@@ -1,1 +1,17 @@
-<p>tmat works!</p>
+<div *ngIf="!wasPressed">
+    <button (click)="click(true)">Tarefa de matemática</button>
+</div>
+
+<div *ngIf="wasPressed">
+    <button (click)="click(false)">Back</button> <br><br><br>
+</div>
+
+<div *ngIf="wasPressed && !sent">
+    <a>Resolva x²+x+1=0:</a> <br>
+    <textarea class="ans"></textarea>
+    <button (click)="send()">Enviar</button>
+</div>
+
+<div *ngIf="sent">
+    Enviado!
+</div>
