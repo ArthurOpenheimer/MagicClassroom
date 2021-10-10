@@ -21,6 +21,11 @@ import { MatComponent } from './mat/mat.component';
 import { RedComponent } from './red/red.component';
 import { SocComponent } from './soc/soc.component';
 import { SdComponent } from './sd/sd.component';
+import { TlpComponent } from './tlp/tlp.component';
+import { TmatComponent } from './tmat/tmat.component';
+import { TredComponent } from './tred/tred.component';
+import { TsocComponent } from './tsoc/tsoc.component';
+import { TsdComponent } from './tsd/tsd.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +43,12 @@ import { SdComponent } from './sd/sd.component';
     MatComponent,
     RedComponent,
     SocComponent,
-    SdComponent
+    SdComponent,
+    TlpComponent,
+    TmatComponent,
+    TredComponent,
+    TsocComponent,
+    TsdComponent
   ],
   imports: [
     BrowserModule,
