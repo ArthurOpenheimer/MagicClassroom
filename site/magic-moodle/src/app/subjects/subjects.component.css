@@ -47,3 +47,12 @@
 .sd:hover {
     background-color: gray;
 }    
+
+.btnPlay {
+    background-color: lightblue;
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 48%;
+    top: 10%;
+}
