@@ -1,4 +1,5 @@
-<div class="container" *ngIf="currentUser; else loggedOut">
+<body>
+  <div class="container-fluid" *ngIf="currentUser; else loggedOut">
     <header class="jumbotron">
       <h3>
         Perfil de <strong>{{ currentUser.username }}</strong>
@@ -14,13 +15,14 @@
       {{ currentUser.email }}
     </p>
     <strong>Cargos:</strong>
-    <ul>
+    <ul>        
       <li *ngFor="let role of currentUser.roles">
-        {{ role }}
+        {{ role }}        
       </li>
     </ul>
   </div>
-  
-  <ng-template #loggedOut>
-    Por favor faça o login.
-  </ng-template>
+    
+    <ng-template #loggedOut>
+      Por favor faça o login.
+    </ng-template>
+</body>
