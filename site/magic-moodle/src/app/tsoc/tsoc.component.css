@@ -21,3 +21,7 @@ body{
     font-size: 20px;
     padding-top: 20%;
 }
+
+button{
+    border-color: transparent;
+}
