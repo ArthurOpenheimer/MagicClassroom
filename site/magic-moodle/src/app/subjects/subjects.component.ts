@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TokenStorageService } from '../_services/token-storage.service';
 
 @Component({
   selector: 'app-subjects',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./subjects.component.css']
 })
 export class SubjectsComponent implements OnInit {
+  currentUser: any;
 
-  constructor() { }
+  constructor(private token: TokenStorageService) { }
 
   ngOnInit(): void {
+    this.currentUser = this.token.getUser();
   }
 
 }
