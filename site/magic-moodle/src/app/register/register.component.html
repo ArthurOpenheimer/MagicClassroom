@@ -1,10 +1,7 @@
 <div class="col-md-12">
+  <div class="offset-3 col-md-6">
     <div class="card card-container">
-      <img
-        id="profile-img"
-        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-        class="profile-img-card"
-      />
+      <img src="https://i.imgur.com/fecZ8Tx.png">
       <form
         *ngIf="!isSuccessful"
         name="form"
@@ -13,11 +10,12 @@
         novalidate
       >
         <div class="form-group">
-          <label for="username">Nome</label>
+          <label for="username"></label>
           <input
             type="text"
             class="form-control"
             name="username"
+            placeholder="Nome"
             [(ngModel)]="form.username"
             required
             minlength="3"
@@ -35,27 +33,10 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            type="email"
-            class="form-control"
-            name="email"
-            [(ngModel)]="form.email"
-            required
-            email
-            #email="ngModel"
-          />
-          <div class="alert-danger" *ngIf="email.errors && f.submitted">
-            <div *ngIf="email.errors.required">É necessário digitar seu email</div>
-            <div *ngIf="email.errors.email">
-              Email inválido
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="password">Senha</label>
+          <label for="password"></label>
           <input
             type="password"
+            placeholder="Senha"
             class="form-control"
             name="password"
             [(ngModel)]="form.password"
@@ -67,6 +48,25 @@
             <div *ngIf="password.errors.required">É necessário digitar sua senha</div>
             <div *ngIf="password.errors.minlength">
               Senha deve conter pelo menos 6 caracteres
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email"></label>
+          <input
+            type="email"
+            placeholder="Email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="form.email"
+            required
+            email
+            #email="ngModel"
+          />
+          <div class="alert-danger" *ngIf="email.errors && f.submitted">
+            <div *ngIf="email.errors.required">É necessário digitar seu email</div>
+            <div *ngIf="email.errors.email">
+              Email inválido
             </div>
           </div>
         </div>
@@ -84,3 +84,4 @@
       </div>
     </div>
   </div>
+</div>

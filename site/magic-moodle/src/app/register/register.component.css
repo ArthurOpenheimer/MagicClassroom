@@ -1,0 +1,35 @@
+.col-md-12  {
+    background-image: url("https://i.imgur.com/3RqxLby.png");
+    width:100%;
+    height:100%; 
+    background-size:cover;
+    background-repeat:no-repeat;
+    background-position:center; 
+    position: fixed; 
+    top:7%; 
+    left: 0; 
+    overflow: hidden;
+}
+
+.offset-3{
+    padding-top: 1%;
+}
+
+.card{
+    background-color: #ffff;
+    opacity: 0.8;
+    border-radius: 15px;
+    align-self: center;
+}
+
+.btn{
+    background-color: lightgreen;
+    border: none;
+    color: black;
+}
+
+img{
+    width: 350px;
+    height: 350px;
+    align-self: center;
+}
