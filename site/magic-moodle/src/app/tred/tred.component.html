@@ -1,0 +1,18 @@
+<div *ngIf="!wasPressed">
+    <button (click)="click(true)">Tarefa de redação</button>
+</div>
+
+<div *ngIf="wasPressed">
+    <button (click)="click(false)">Back</button> <br><br><br>
+</div>
+
+<div *ngIf="wasPressed && !sent">
+    <a>Escreva uma redação sobre trabalho infantil:</a> <br>
+    <textarea class="ans"></textarea>
+    <button (click)="send()">Enviar</button>
+</div>
+
+<div *ngIf="sent">
+    Enviado!
+</div>
+

@@ -3,6 +3,7 @@ export default function createAbstractScene(){
     let observers = [];
     let _state = {
         players: {},
+        numPlayers: 0,
     }
     
     function getState(){
@@ -12,20 +13,23 @@ export default function createAbstractScene(){
     function addPlayer(playerId){
         const player = createAbstractPlayer(playerId);
         player.spriteId = "student01";
+        player.name = "Aluno " + _state.numPlayers; 
         player.setPosition({
-            x: Math.floor(Math.random() * 400 + 100),
-            y: Math.floor(Math.random() * 400 + 100),
+            x: 50,
+            y: 400,
         });
         player.velocity = 5;
-
         _state.players[playerId] = player;
+        _state.numPlayers += 1;
+        console.log(_state.numPlayers)
         notifyAll({type: 'add-player', player: player,});
     }
 
     function removePlayer(playerId) {
         const players = _state.players;
         delete players[playerId];
-        
+        _state.numPlayers -= 1;
+        console.log(_state.numPlayers)
         notifyAll({
             type:'remove-player',
             id: playerId,
@@ -47,6 +51,10 @@ export default function createAbstractScene(){
         player.input = movement.input;
     }
 
+    function collisionManager(collision) {
+        notifyAll(collision);
+    }
+
     function subscribe(observerFunction) {
         observers.push(observerFunction);
     }
@@ -65,6 +73,7 @@ export default function createAbstractScene(){
         addPlayer,
         removePlayer,
         movePlayer,
+        collisionManager,
         subscribe,
     };  
 }

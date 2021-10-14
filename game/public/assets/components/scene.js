@@ -10,11 +10,17 @@ export default function createScene(htmlDOM, PIXI) {
     let currentPlayer;
     let currentPlayerId;
     let sheet;
+    let btn;
     let chat;
     let state = {
         players: {},
     }
-    let colideableGameObjects = [];
+
+    let colliders = {
+        lobby: [],
+        corredor: [],
+    }
+  
     let layers = {
         players: new PIXI.Container(),
         background: new PIXI.Container(),
@@ -44,7 +50,7 @@ export default function createScene(htmlDOM, PIXI) {
     function loadAssets(){
         
         loader.add("assets/sprites/spriteSheet.json");
-        loader.add("assets/sprites/lobby_map.png");
+        loader.add("assets/sprites/corredor.png");
 
         loader.load((loader, resources) => {
             sheet = resources["assets/sprites/spriteSheet.json"].spritesheet;
@@ -69,7 +75,6 @@ export default function createScene(htmlDOM, PIXI) {
         setState(newState);
         currentPlayer = state.players[currentPlayerId];
         app.stage.SORTABLE_CHILDREN = true;
-
         layerManager.addChild(layers.background);
         layerManager.addChild(layers.objects);
         layerManager.addChild(layers.players);
@@ -80,14 +85,31 @@ export default function createScene(htmlDOM, PIXI) {
         layers.UI.zIndex = 2;
         app.stage.addChild(layerManager);
 
+        btn = createGameObject(PIXI, PIXI.Texture.from("assets/sprites/blackboard.png"), {x: app.renderer.width + app.renderer.width/2, y: app.renderer.height/2}, false)
+        btn.sprite.scale.set(2,2)
+        btn.sprite.anchor.set(0.5)
+        addOnStage(btn.body, "UI")
+        btn.sprite.interactive = true;
+        btn.sprite.buttonMode = true;
+        btn.sprite.visible = false;
+        btn.sprite
+        .on('pointerdown', () => {
+            window.location = "https://www.microsoft.com/pt-br/microsoft-teams/log-in"
+        })
+        window.addEventListener('keydown', (e) => {
+            if(e.key == "Escape") {
+                btn.sprite.visible = false;
+            }
+        })
 
         ticker.add(delta => update(delta));
         subscribeKeys();
         
         chat = createChat(PIXI, app, (message) =>{
+            console.log(message.name)
             notifyAll({
                 type: 'chat-message',
-                id: clientId,
+                id: currentPlayer.name,
                 text: message,
             })
         });
@@ -109,11 +131,29 @@ export default function createScene(htmlDOM, PIXI) {
     }
 
     function checkCollision() {
-        if(!colideableGameObjects) return
-        colideableGameObjects.forEach(obj => {
+        if(!colliders.lobby) return
+        
+        colliders[currentPlayer.location].forEach(obj => {
             if(boxesIntersect(currentPlayer.spriteContainer, obj)){
-                let dir = currentPlayer._facing;
+
+                if(obj.tag == "teleport") {
+                    app.stage.x -= app.renderer.width;
+                    currentPlayer.location = "corredor";
+                    currentPlayer.setPosition({x: currentPlayer.body.x + 100, y: currentPlayer.body.y + 200}, true)
+                }
+
+                if(obj.tag == "teleportBack") {
+                    app.stage.x += app.renderer.width;
+                    currentPlayer.location = "lobby";
+                    currentPlayer.setPosition({x: currentPlayer.body.x - 100, y: currentPlayer.body.y - 200}, true)
+                }
+
+                if(obj.tag == "class") {
+                    goToClass();
+                }
+
                 currentPlayer.setAnimation();
+                let dir = currentPlayer._facing;
                 switch(dir){
                     case "up":
                         currentPlayer.input.y = 0; 
@@ -134,12 +174,18 @@ export default function createScene(htmlDOM, PIXI) {
                     default:
                         break;
                 }
+                
                 currentPlayer.blockedDirections.push(currentPlayer._facing);
+
+                notifyAll({
+                    type: 'collision-detection',
+                    id: currentPlayerId,
+                    blockedDirections: currentPlayer.blockedDirections,
+                })
             }
             else{
                 currentPlayer.blockedDirections = []
             }
-
         });
     }
 
@@ -152,8 +198,14 @@ export default function createScene(htmlDOM, PIXI) {
         return ab.x + ab.width > bb.x && ab.x < bb.x + bb.width && ab.y + ab.height > bb.y && ab.y < bb.y + bb.height;
     }
 
-    function addColision(obj){
-        colideableGameObjects.push(obj);
+    function addColision(obj, location){
+        if(!location || location == "lobby" || location == "all") colliders.lobby.push(obj);
+        if(location == "corredor" || location == "all") colliders.corredor.push(obj);
+        
+    }
+
+    function goToClass() {
+        btn.sprite.visible = true;
     }
 
     function constructMap(){
@@ -180,6 +232,78 @@ export default function createScene(htmlDOM, PIXI) {
         addColision(board)
         addOnStage(board.body)
 
+        let bench = createGameObject(PIXI, sheet.textures["bench.png"], {x: 350, y: 500}, false);
+        bench.sprite.scale.set(2.5);
+        bench.boxCollider = {width: bench.sprite.width - 15, height: bench.sprite.height -30, xAjust: 0, yAjust: 30}
+        addColision(bench)
+        addOnStage(bench.body)
+
+        let bench2 = createGameObject(PIXI, sheet.textures["bench.png"], {x: 480, y: 500}, false);
+        bench2.sprite.scale.set(2.5);
+        bench2.boxCollider = {width: bench2.sprite.width - 15, height: bench2.sprite.height -30, xAjust: 0, yAjust: 30}
+        addColision(bench2)
+        addOnStage(bench2.body)
+
+        let table = createGameObject(PIXI, sheet.textures["tables.png"], {x: 415, y: 500}, false)
+        table.sprite.scale.set(2.5);
+        table.boxCollider = {width: bench.sprite.width, height: bench.sprite.height, xAjust: 0, yAjust: 20}
+        addColision(table);
+        addOnStage(table.body)
+
+        let colliderMapLeft = {
+            boxCollider: {width: 1, height: app.renderer.height, xAjust: 0, yAjust: 0},
+            body: {x: 0, y:0}
+        }
+        addColision(colliderMapLeft, "all")
+
+        let colliderMapUp = {
+            boxCollider: {width: app.renderer.width, height: 1, xAjust: 0, yAjust: 0},
+            body: {x: 0, y:0}
+        }
+        addColision(colliderMapUp)
+
+        let colliderMapRight = {
+            boxCollider: {width: 1, height: app.renderer.height, xAjust: 0, yAjust: 0},
+            body: {x: app.renderer.width, y:0}
+        }
+        addColision(colliderMapRight, "all")
+        
+        let colliderMapDown = {
+            boxCollider: {width: app.renderer.width, height: 1, xAjust: 0, yAjust: 0},
+            body: {x:0, y: app.renderer.height}
+        }
+        addColision(colliderMapDown, "all")
+
+        let colliderTeleport = {
+            boxCollider: {width: 1, height: 100, xAjust: -10, yAjust: -50},
+            body: {x: app.renderer.width, y: app.renderer.height/2},
+            tag: "teleport",
+        }
+        addColision(colliderTeleport)
+      
+        //Corredor objects
+
+        let colliderCorredorUp = {
+            boxCollider: {width: app.renderer.width, height: 1, xAjust: 0, yAjust: 350},
+            tag: "class",
+            body: {x: 0, y:0}
+        }
+        addColision(colliderCorredorUp, "corredor")
+
+        let corredor = createGameObject(PIXI, PIXI.Texture.from("assets/sprites/corredor.png"), {x: app.renderer.width, y: 0}, false)
+        corredor.sprite.scale.set(0.6, 0.6);
+        addOnStage(corredor.body, "background")
+
+    
+        let colliderCorredorTeleport = {
+            boxCollider: {width: 4, height: 1, xAjust: 0, yAjust: 200},
+            tag: "teleportBack",
+            body: {x: 5, y: app.renderer.height/2}
+        }
+        addColision(colliderCorredorTeleport, "corredor")
+
+        
+    
     }
 
     function receiveChatMessage(msg){
@@ -196,7 +320,7 @@ export default function createScene(htmlDOM, PIXI) {
     }
 
     function addPlayer(newPlayer){
-        const player = createPlayer(newPlayer.id, notifyAll, PIXI, sheet);
+        const player = createPlayer(newPlayer.id, notifyAll, PIXI, sheet, newPlayer.name);
 
         player.spriteId = newPlayer.spriteId;
         player.velocity = newPlayer.velocity;
@@ -321,6 +445,12 @@ export default function createScene(htmlDOM, PIXI) {
         player.setPosition(position);
     }
 
+    function proxyCollision(collision) {
+        state.players[collision.id].blockedDirections = collision.blockedDirections;
+        state.players[collision.id].input.x = 0;
+        state.players[collision.id].input.y = 0;
+    }
+
     function addOnStage(object, layer){
         if(!layer){
             layer = "objects";
@@ -346,5 +476,6 @@ export default function createScene(htmlDOM, PIXI) {
         receiveChatMessage,
         moveProxy,
         subscribe,
+        proxyCollision,
     }
 }

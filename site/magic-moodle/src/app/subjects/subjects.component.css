@@ -1,0 +1,58 @@
+.lp{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+} 
+.lp:hover {
+    background-color: gray;
+}   
+
+.mat{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+.mat:hover {
+    background-color: gray;
+}
+
+.red{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+} 
+.red:hover {
+    background-color: gray;
+}   
+
+.soc{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+} 
+.soc:hover {
+    background-color: gray;
+}   
+
+.sd{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+} 
+.sd:hover {
+    background-color: gray;
+}    
+
+.btnPlay {
+    background-color: lightblue;
+    border: none;
+    outline: none;
+    position: absolute;
+    left: 48%;
+    top: 10%;
+}

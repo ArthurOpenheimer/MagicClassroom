@@ -1,9 +1,11 @@
-export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
+export default function createPlayer(playerId, notifyAll, PIXI, sheet, newName) {
 
     let player = {
         spriteContainer: null,
         body: null,
+        name: newName,
         currentAnimation: null,
+        location: "lobby",
         animations: {
             idle: {
                 up: null,
@@ -57,11 +59,21 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
             this.currentAnimation = newAnimation;
         },
 
-        setPosition(position) {
+        setPosition(position, notify) {
             if(!position.x && !position.y) return 
 
             this.body.x = position.x;
             this.body.y = position.y;
+
+            if(notify){
+                notifyAll({
+                    type: 'move-player',
+                    input: this.input,
+                    facing: this.getFacing(),
+                    position: this.getPosition(),
+                    id: this.id,
+                })
+            }
         },
 
         setSprite(spriteId) {
@@ -70,8 +82,10 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
 
         setNickname(nick){
             let nickname = new PIXI.Text(`${nick}`,{fontFamily : 'Arial', fontSize: 15, fill : 0x000000, align : 'center'});
-            nickname.y -= 70;
-            nickname.x -= nickname.width/2;
+            nickname.anchor.set(0.5)
+            nickname.y = this.spriteContainer.y - 20;
+            nickname.x = 40;
+
             player.body.addChild(nickname);
         },
         
@@ -185,7 +199,7 @@ export default function createPlayer(playerId, notifyAll, PIXI, sheet) {
         player.spriteContainer.scale.set(2.6,2.6)
 
         player.body.addChild(player.spriteContainer);
-        player.setNickname(player.id)
+        player.setNickname(player.name)
         player._facing = "down";
         player.setAnimation();
 

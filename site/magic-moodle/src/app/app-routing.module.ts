@@ -10,6 +10,16 @@ import { BoardModeratorComponent } from './board-moderator/board-moderator.compo
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 import { GameComponent } from './game/game.component';
 import { SubjectsComponent } from './subjects/subjects.component';
+import { MatComponent } from './mat/mat.component';
+import { PortComponent } from './port/port.component';
+import { RedComponent } from './red/red.component';
+import { SdComponent } from './sd/sd.component';
+import { SocComponent } from './soc/soc.component';
+import { TlpComponent } from './tlp/tlp.component';
+import { TmatComponent } from './tmat/tmat.component';
+import { TsocComponent } from './tsoc/tsoc.component';
+import { TsdComponent } from './tsd/tsd.component';
+import { TredComponent } from './tred/tred.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -21,6 +31,16 @@ const routes: Routes = [
   { path: 'admin', component: BoardAdminComponent },
   { path: 'play', component: GameComponent },
   { path: 'subjects', component: SubjectsComponent },
+  { path: 'mat', component: MatComponent },
+  { path: 'port', component: PortComponent },
+  { path: 'red', component: RedComponent },
+  { path: 'sd', component: SdComponent },
+  { path: 'soc', component: SocComponent },
+  { path: 'tlp', component: TlpComponent },
+  { path: 'tmat', component: TmatComponent},
+  { path: 'tsoc', component: TsocComponent },
+  { path: 'tsd', component: TsdComponent },
+  { path: 'tred', component: TredComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 

@@ -37,6 +37,10 @@ function connect(scene) {
         scene.moveProxy(command);
     })
     
+    socket.on('collision-detection', (command) => {
+        if(command.id == socket.id) return;
+        scene.proxyCollision(command);
+    })
 
     socket.on('remove-player', (command) => {
         const playerId = command.id;
@@ -47,19 +51,6 @@ function connect(scene) {
     socket.on('chat-message', (command) => {
         scene.receiveChatMessage(command);
     })
-
-    const constraints = {
-        'audio': true,
-        'video': false
-    }
-
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(stream => {
-            console.log('Got MediaStream: ', stream);
-        })
-        .catch(err => {
-            console.error('Errror acessing MediaDevices: ', err);
-        });
 }
 
 main();

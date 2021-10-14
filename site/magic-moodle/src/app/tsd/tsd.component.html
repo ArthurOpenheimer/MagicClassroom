@@ -1,0 +1,17 @@
+<div *ngIf="!wasPressed">
+    <button (click)="click(true)">Tarefa de sistemas digitais</button>
+</div>
+
+<div *ngIf="wasPressed">
+    <button (click)="click(false)">Back</button> <br><br><br>
+</div>
+
+<div *ngIf="wasPressed && !sent">
+    <a>Qual é a tensão de operação do arduino uno?</a> <br>
+    <textarea class="ans"></textarea>
+    <button (click)="send()">Enviar</button>
+</div>
+
+<div *ngIf="sent">
+    Enviado!
+</div>
