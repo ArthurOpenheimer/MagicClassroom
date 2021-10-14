@@ -1,0 +1,31 @@
+body{
+    position:fixed;
+    padding:0;
+    margin:0;
+
+    top:7%;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background-color: lightgreen;
+
+    text-align: center;
+}
+
+div{
+    background-color: #ffff;
+    opacity: 0.8;
+    border-radius: 55px;
+    height: 500px;
+    width:500px;
+}
+
+h1{
+    font-family:monospace;
+    padding-top: 20%;
+}
+
+ul{
+padding-right: 7%;
+}

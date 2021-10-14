@@ -1,3 +1,28 @@
+body{
+    position:fixed;
+    padding:0;
+    margin:0;
+
+    top:7%;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background-color: lightgreen; 
+}
+
+.col-12{
+    background-color: #ffff;
+    opacity: 0.8;
+    border-radius: 55px;
+    height: 300px;
+    width:500px;
+}
+
+div{
+    align-content: center;
+}
+
 .lp{
     width: 100%;
     background-color: transparent;
@@ -49,10 +74,11 @@
 }    
 
 .btnPlay {
-    background-color: lightblue;
+    background-color: lightgreen;
+    color: black;
     border: none;
     outline: none;
     position: absolute;
-    left: 48%;
-    top: 10%;
+    left: 45%;
+    top: 12%;
 }
