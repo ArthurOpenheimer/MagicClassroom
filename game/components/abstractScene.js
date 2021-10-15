@@ -13,6 +13,7 @@ export default function createAbstractScene(){
     function addPlayer(playerId){
         const player = createAbstractPlayer(playerId);
         player.spriteId = "student01";
+        player.name = "Aluno " + _state.numPlayers; 
         player.setPosition({
             x: 50,
             y: 400,

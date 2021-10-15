@@ -320,10 +320,7 @@ export default function createScene(htmlDOM, PIXI) {
     }
 
     function addPlayer(newPlayer){
-        const urlString = window.location.search;
-        const urlParams = new URLSearchParams(urlString);
-        const name = urlParams.get('q')
-        const player = createPlayer(newPlayer.id, notifyAll, PIXI, sheet, name);
+        const player = createPlayer(newPlayer.id, notifyAll, PIXI, sheet, newPlayer.name);
 
         player.spriteId = newPlayer.spriteId;
         player.velocity = newPlayer.velocity;
